@@ -77,16 +77,14 @@
     <div style="margin-top:10px;font-size:.85em;color:#555;">
         コピーしたら、Googleフォームの「買い目・印」欄に貼り付けて送信してください。
     </div>
-    <a href="https://docs.google.com/forms/d/e/1FAIpQLSd3lkH75uSufuwNEllHmrXZQmxXnq-w1T2SBLne6kO7JiUJvA/viewform?usp=header"
-       target="_blank" class="form-open-btn">📝 Googleフォームを開く</a>
+    <a id="form-open-btn" href="#" target="_blank" class="form-open-btn"
+       onclick="this.href=GOOGLE_FORM_URL">📝 Googleフォームを開く</a>
 </div>
 
 </div>
 
 <script src="js/common.js"></script>
 <script>
-const MY_MARKS_KEY  = 'mymarks_ps2627';
-const CART_STORAGE_KEY = 'cart_ps2627';
 const UNIQUE_MARKS  = ['honmei','taikou','tanana','renka'];
 const MARK_LABELS   = { honmei:'◎', taikou:'○', tanana:'▲', renka:'⟁', osae:'△' };
 const MARK_FILES    = {

@@ -72,6 +72,35 @@ window.addEventListener('DOMContentLoaded', async () => {
             if (tabEl) switchTab(savedTab, tabEl);
             else render();
         }
+
+        // ① オッズ行クリックリスナー（DOMContentLoaded内に統合）
+        document.getElementById('main-view').addEventListener('click', function (e) {
+            const row = e.target.closest('tr.odds_row');
+            if (!row) return;
+            let combKey, betType, displayType;
+            if (currentType === 'win-place') {
+                const cell = e.target.closest('td[data-bet-type]');
+                if (!cell) return;
+                betType     = cell.dataset.betType;
+                combKey     = row.dataset.no;
+                displayType = betType === 'win' ? '単勝' : '複勝';
+            } else {
+                const cell = e.target.closest('td[data-clickable]');
+                if (!cell) return;
+                combKey     = row.dataset.comb;
+                betType     = currentType;
+                displayType = document.querySelector('.tab-menu li.active').innerText;
+                if (!combKey) return;
+            }
+            cart.push({ id: genId(), displayType, type: betType, formation: combKey, combs: [combKey], amountPerBet: 100 });
+            saveCart();
+            renderCart();
+            document.getElementById('bet-management').scrollIntoView({ behavior: 'smooth', block: 'start' });
+            row.style.transition = 'none';
+            row.style.backgroundColor = '#ffe082';
+            setTimeout(() => { row.style.transition = 'background 0.4s'; row.style.backgroundColor = ''; }, 150);
+        });
+
     } catch (e) {
         console.error('データ読み込み失敗:', e);
         document.body.insertAdjacentHTML('afterbegin',
@@ -91,8 +120,6 @@ function renderTeamHeader() {
     });
     table.innerHTML = h + '</tr>' + t + '</tr>';
 }
-
-const TAB_STORAGE_KEY  = 'tab_ps2627';
 
 // タブごとのマークシート状態（ページ内のみ、保存なし）
 const msState = {};
@@ -327,18 +354,20 @@ function getMsCombinations() {
     } else {
         // formation
         if (currentType === 'quinella' || currentType === 'wide') {
+            const seen = new Set();
             r0.forEach(a => r1.forEach(b => {
                 if (a === b) return;
                 const p = uniqPair(a, b);
-                if (!res.includes(p)) res.push(p);
+                if (!seen.has(p)) { seen.add(p); res.push(p); }
             }));
         } else if (currentType === 'exacta') {
             r0.forEach(a => r1.forEach(b => { if (a !== b) res.push(`${a}-${b}`); }));
         } else if (currentType === 'trio') {
+            const seen = new Set();
             r0.forEach(a => r1.forEach(b => r2.forEach(c => {
                 if (a !== b && b !== c && a !== c) {
                     const t = uniqTrio(a, b, c);
-                    if (!res.includes(t)) res.push(t);
+                    if (!seen.has(t)) { seen.add(t); res.push(t); }
                 }
             })));
         } else if (currentType === 'trifecta') {
@@ -444,37 +473,6 @@ function renderWinPlace() {
     container.innerHTML = html + `</tbody></table>`;
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('main-view').addEventListener('click', function (e) {
-        const row = e.target.closest('tr.odds_row');
-        if (!row) return;
-        let combKey, betType, displayType;
-        if (currentType === 'win-place') {
-            const cell = e.target.closest('td[data-bet-type]');
-            if (!cell) return;
-            betType     = cell.dataset.betType;
-            combKey     = row.dataset.no;
-            displayType = betType === 'win' ? '単勝' : '複勝';
-        } else {
-            // オッズセル（右側）のクリックのみ反応
-            const cell = e.target.closest('td[data-clickable]');
-            if (!cell) return;
-            combKey     = row.dataset.comb;
-            betType     = currentType;
-            displayType = document.querySelector('.tab-menu li.active').innerText;
-            if (!combKey) return;
-        }
-        cart.push({ id: genId(), displayType, type: betType, formation: combKey, combs: [combKey], amountPerBet: 100 });
-        saveCart();
-        renderCart();
-        document.getElementById('bet-management').scrollIntoView({ behavior: 'smooth', block: 'start' });
-        row.style.transition = 'none';
-        row.style.backgroundColor = '#ffe082';
-        setTimeout(() => { row.style.transition = 'background 0.4s'; row.style.backgroundColor = ''; }, 150);
-    });
-});
-
-const CART_STORAGE_KEY = 'cart_ps2627';
 
 function saveCart() {
     localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
@@ -659,7 +657,9 @@ function npConfirm() {
         }
     }
     _closeNumpadCleanup();
-}function _doExpandWithBudget(id, budget) {
+}
+
+function _doExpandWithBudget(id, budget) {
     const item = cart.find(i => i.id === id);
     if (!item || item.combs.length === 0) return;
 
@@ -708,7 +708,6 @@ function npConfirm() {
 }
 
 // ── フォーム出力 ─────────────────────────────────────
-const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSd3lkH75uSufuwNEllHmrXZQmxXnq-w1T2SBLne6kO7JiUJvA/viewform?usp=header';
 
 function prepareGoogleForm() {
     if (cart.length === 0) return alert('買い目がありません');
