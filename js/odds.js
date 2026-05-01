@@ -577,20 +577,38 @@ function prepareGoogleForm() {
 function copyFormData() {
     const text = document.getElementById('form-data-text').value;
     if (!text) return;
-    navigator.clipboard.writeText(text).then(() => {
-        const fb = document.getElementById('copy-feedback');
+
+    const onSuccess = () => {
+        const fb  = document.getElementById('copy-feedback');
         const btn = document.getElementById('btn-copy');
-        fb.style.display = 'inline';
-        btn.textContent = '✔ コピー済み';
+        fb.style.display  = 'inline';
+        btn.textContent   = '✔ コピー済み';
         setTimeout(() => {
             fb.style.display = 'none';
-            btn.textContent = '📋 コピーする';
+            btn.textContent  = '📋 コピーする';
         }, 3000);
-    }).catch(() => {
-        // clipboard API非対応時のフォールバック
-        const ta = document.getElementById('form-data-text');
-        ta.select();
-        document.execCommand('copy');
-        alert('コピーしました');
-    });
+    };
+
+    // clipboard API（HTTPS / localhost）
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(onSuccess).catch(() => fallbackCopy(text, onSuccess));
+    } else {
+        fallbackCopy(text, onSuccess);
+    }
+}
+
+function fallbackCopy(text, onSuccess) {
+    // readonlyを一時解除して選択→コピー→再設定
+    const ta = document.getElementById('form-data-text');
+    ta.removeAttribute('readonly');
+    ta.focus();
+    ta.select();
+    try {
+        const ok = document.execCommand('copy');
+        if (ok) onSuccess();
+        else alert('コピーできませんでした。手動で選択してコピーしてください。');
+    } catch (e) {
+        alert('コピーできませんでした。手動で選択してコピーしてください。');
+    }
+    ta.setAttribute('readonly', '');
 }
