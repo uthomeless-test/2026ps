@@ -277,7 +277,7 @@ function applyMarksheet() {
 function setMarksheet() {
     const combs = getMsCombinations();
     if (combs.length === 0) return alert('買い目を選択してください');
-    const modeNames = { formation: 'フォーメーション', box: 'ボックス', axis1: '1チーム軸', axis2: '2チーム軸' };
+    const modeNames = { formation: 'フォーメーション', box: 'ボックス', axis1: '1チーム軸マルチ', axis2: '2チーム軸マルチ' };
     const displayType = document.querySelector('.tab-menu li.active').innerText;
     let formationStr = '';
     if (voteMode === 'formation') {
