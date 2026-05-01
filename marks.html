@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premier Series 26-27予想企画 — 印</title>
+    <title>印 — Premier Series 26-27予想企画</title>
     <link rel="icon" href="favicon.ico">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <link rel="stylesheet" href="css/style.css">
@@ -54,6 +54,7 @@
         .mark-legend { display:flex; gap:12px; flex-wrap:wrap; align-items:center; padding:6px 10px; background:#f5f5f5; border:1px solid #ddd; border-radius:4px; margin-bottom:12px; font-size:.82em; }
         .mark-legend-item { display:flex; align-items:center; gap:3px; }
         .mark-legend-item img { width:18px; height:18px; }
+        .warn-box { background:#fff3cd; border:1px solid #ffc107; border-radius:4px; padding:8px 12px; font-size:.85em; margin:8px 0; display:none; }
         .save-status { font-size:.82em; color:#007d43; margin-left:10px; display:none; }
         .next-btn { display:inline-block; padding:10px 28px; background:#007d43; color:#fff; font-weight:bold; border-radius:4px; text-decoration:none; font-size:.95em; }
         .next-btn:hover { background:#005a30; }
@@ -107,16 +108,19 @@
     各チームへの予想印を選んでください。入力内容は自動で保存されます。
 </p>
 
-<p style="font-size:.85em;color:#555;background:#f5f5f5;border-left:3px solid #aaa;padding:6px 10px;margin-bottom:10px;">💡 <strong>印の入力は任意です。</strong>買い目の送信のみでも参加できます。</p>
+<p class="required-note">◎（本命）は必ず1チームに付けてください</p>
+<p style="font-size:.85em;color:#555;background:#f5f5f5;border-left:3px solid #aaa;padding:6px 10px;margin-bottom:10px;">💡 印の入力は任意です。買い目の送信のみでも参加できます。印を付ける場合は◎を必ず1チームに設定してください。</p>
 
 <div class="mark-legend">
     <strong>印：</strong>
-    <div class="mark-legend-item">◎ 本命</div>
+    <div class="mark-legend-item">◎ 本命（必須）</div>
     <div class="mark-legend-item">○ 対抗</div>
     <div class="mark-legend-item">▲ 単穴</div>
     <div class="mark-legend-item">⟁ 連下</div>
     <div class="mark-legend-item">△ 抑え</div>
 </div>
+
+<div id="warn-box" class="warn-box"></div>
 
 <div class="marks-outer">
     <div class="marks-table" id="marks-table"></div>
@@ -231,6 +235,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     try {
         teamsData = await loadJSON('data/teams.json');
         renderTable();
+        checkWarnings();
         updateFormationPreview();
         if (window.innerWidth < 768) {
             const outer = document.querySelector('.marks-outer');
@@ -291,7 +296,7 @@ function onMarkChange(teamId,sel) {
     }
     selectedMarks[String(teamId)]=val;
     updateSelectStyle(sel,val);
-    saveMarks();updateFormationPreview();drawCanvas();
+    saveMarks();checkWarnings();updateFormationPreview();drawCanvas();
 }
 
 function updateSelectStyle(sel,val) {
@@ -305,11 +310,18 @@ function saveMarks() {
     setTimeout(()=>{st.style.display='none';},2000);
 }
 
+function checkWarnings() {
+    const warnBox=document.getElementById('warn-box');
+    const hasHonmei=Object.values(selectedMarks).includes('honmei');
+    if(!hasHonmei){warnBox.style.display='block';warnBox.textContent='⚠️ ◎（本命）がまだ付いていません';}
+    else warnBox.style.display='none';
+}
+
 function resetMarks() {
     if(!confirm('印をすべてリセットします。よろしいですか？'))return;
     selectedMarks={};localStorage.setItem(MY_MARKS_KEY,JSON.stringify(selectedMarks));
     teamsData.forEach(t=>{const s=document.getElementById(`mark-${t.id}`);if(s){s.value='';updateSelectStyle(s,'');}});
-    updateFormationPreview();drawCanvas();
+    checkWarnings();updateFormationPreview();drawCanvas();
 }
 
 // ── フォーメーション生成 ──
