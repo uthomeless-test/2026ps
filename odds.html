@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>e-Sports Odds Master — オッズ</title>
+    <title>Premier Series 26-27予想企画 — オッズ</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -75,7 +75,7 @@
         <div>残り予算: <span id="remaining-budget" style="color:#fff;font-size:1.4em;">20,000</span> pt</div>
     </div>
     <div style="margin-top:10px;text-align:right;">
-        <button class="odd_view" style="background:#007d43;color:#fff;" onclick="prepareGoogleForm()">Googleフォームへ送信データ作成</button>
+        <button class="odd_view" style="background:#007d43;color:#fff;" onclick="prepareGoogleForm()">買い目データを作成・フォームへ</button>
     </div>
 </div>
 
@@ -103,10 +103,26 @@
 </div>
 
 <div id="form-export-area" class="hidden">
-    <h3 style="margin-top:0;">送信データ確認</h3>
-    <textarea id="form-data-text" style="width:100%;height:70%;font-family:monospace;font-size:12px;"></textarea>
-    <div style="margin-top:15px;text-align:center;">
-        <button style="padding:10px 30px;" onclick="document.getElementById('form-export-area').classList.add('hidden')">閉じる</button>
+    <h3 style="margin-top:0;">買い目データ確認</h3>
+    <p style="font-size:.85em;color:#555;margin:0 0 8px;">
+        ①下のテキストをコピーして、②Googleフォームの「買い目」欄に貼り付けてください。
+    </p>
+    <textarea id="form-data-text" style="width:100%;height:50%;font-family:monospace;font-size:12px;box-sizing:border-box;" readonly></textarea>
+    <div style="margin-top:10px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+        <button id="btn-copy" class="odd_view" onclick="copyFormData()" style="min-width:140px;">📋 コピーする</button>
+        <span id="copy-feedback" style="color:#007d43;font-size:.9em;font-weight:bold;display:none;">✔ コピーしました！</span>
+    </div>
+    <div style="margin-top:12px;padding:12px;background:#fff8e1;border:1px solid #ffd54f;border-radius:4px;font-size:.85em;">
+        コピーしたら、Googleフォームの「買い目」欄に貼り付けて送信してください。
+        <div style="margin-top:8px;">
+            <a id="btn-open-form" href="https://docs.google.com/forms/d/e/1FAIpQLSd3lkH75uSufuwNEllHmrXZQmxXnq-w1T2SBLne6kO7JiUJvA/viewform" target="_blank"
+               style="display:inline-block;padding:10px 24px;background:#003399;color:#fff;font-weight:bold;border-radius:4px;text-decoration:none;font-size:1em;">
+                📝 Googleフォームを開く
+            </a>
+        </div>
+    </div>
+    <div style="margin-top:12px;text-align:right;">
+        <button style="padding:8px 20px;cursor:pointer;" onclick="document.getElementById('form-export-area').classList.add('hidden')">閉じる</button>
     </div>
 </div>
 
