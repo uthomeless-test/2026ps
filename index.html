@@ -298,11 +298,12 @@ function openMemberPopup(member, anchor) {
     document.getElementById('popup-member-name').textContent = member.name;
     const links = document.getElementById('popup-links');
     links.innerHTML = '';
-    if (!member.x && !member.youtube) {
+    if (!member.x && !member.youtube && !member.bilibili) {
         links.innerHTML = '<span class="no-link">リンク情報なし</span>';
     } else {
         if (member.x) { const a = document.createElement('a'); a.href = member.x; a.target = '_blank'; a.innerHTML = '<span>𝕏</span> X (Twitter)'; links.appendChild(a); }
         if (member.youtube) { const a = document.createElement('a'); a.href = member.youtube; a.target = '_blank'; a.innerHTML = '<span>▶</span> YouTube'; links.appendChild(a); }
+        if (member.bilibili) { const a = document.createElement('a'); a.href = member.bilibili; a.target = '_blank'; a.innerHTML = '<span>▶</span> Bilibili'; links.appendChild(a); }
     }
     popup.style.display = 'block';
     const rect = anchor.getBoundingClientRect();

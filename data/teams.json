@@ -17,9 +17,9 @@
     "tag": "ZETA",
     "logo": "assets/images/zeta_logo.svg",
     "members": [
-      { "name": "CQCQ",  "x": "https://x.com/cqcq_sv",        "youtube": "https://www.youtube.com/@cqcqshadowverse" },
-      { "name": "ヘイム", "x": "https://x.com/heimu_v0122v",   "youtube": "https://www.youtube.com/@heim_sv" },
-      { "name": "TBT",   "x": "https://x.com/tabe_tter",      "youtube": "https://www.youtube.com/@tabe_tter" }
+      { "name": "CQCQ",  "x": "https://x.com/cqcq_sv",      "youtube": "https://www.youtube.com/@cqcqshadowverse" },
+      { "name": "ヘイム", "x": "https://x.com/heimu_v0122v", "youtube": "https://www.youtube.com/@heim_sv" },
+      { "name": "TBT",   "x": "https://x.com/tabe_tter",    "youtube": "https://www.youtube.com/@tabe_tter" }
     ]
   },
   {
@@ -28,9 +28,9 @@
     "tag": "DFM",
     "logo": "assets/images/dfm_logo.svg",
     "members": [
-      { "name": "ミル",   "x": "", "youtube": "" },
-      { "name": "ユーリ", "x": "", "youtube": "" },
-      { "name": "かなで", "x": "", "youtube": "" }
+      { "name": "ミル",   "x": "https://x.com/bbq_mill",   "youtube": "https://www.youtube.com/@bbq_mill39" },
+      { "name": "ユーリ", "x": "https://x.com/yuuri8540",  "youtube": "https://www.youtube.com/@ch-dq9dh" },
+      { "name": "かなで", "x": "https://x.com/komeizi_sv", "youtube": "https://www.youtube.com/@%E3%81%8B%E3%81%AA%E3%81%A7-s2m" }
     ]
   },
   {
@@ -39,9 +39,9 @@
     "tag": "VRL",
     "logo": "assets/images/varrel_logo.svg",
     "members": [
-      { "name": "Mishadow51", "x": "", "youtube": "" },
-      { "name": "Terarina",   "x": "", "youtube": "" },
-      { "name": "monakawan",  "x": "", "youtube": "" }
+      { "name": "Mishadow51", "x": "https://x.com/Mishadow51",        "bilibili": "https://space.bilibili.com/169172902?spm_id_from=333.1007.0.0" },
+      { "name": "Terarina",   "x": "https://x.com/tera_rina",         "youtube": "https://www.youtube.com/@terarina7187" },
+      { "name": "monakawan",  "x": "https://x.com/9baPooKS9w14337" }
     ]
   },
   {
@@ -50,10 +50,10 @@
     "tag": "MRG",
     "logo": "assets/images/mrg_logo.svg",
     "members": [
-      { "name": "マイト",   "x": "", "youtube": "" },
-      { "name": "glory",    "x": "", "youtube": "" },
-      { "name": "Toby",     "x": "", "youtube": "" },
-      { "name": "Spicies",  "x": "", "youtube": "" }
+      { "name": "マイト",  "x": "https://x.com/maito_2626",  "youtube": "https://www.youtube.com/@%E3%83%9E%E3%82%A4%E3%83%88" },
+      { "name": "glory",   "x": "https://x.com/glory__2020", "youtube": "https://www.youtube.com/@glory_2020" },
+      { "name": "Toby",    "x": "https://x.com/toby_24ss",   "youtube": "https://www.youtube.com/@toby6968" },
+      { "name": "Spicies", "x": "https://x.com/Spicies_",    "youtube": "https://www.youtube.com/@Spicies" }
     ]
   },
   {
@@ -62,10 +62,10 @@
     "tag": "RC",
     "logo": "assets/images/reject_logo.svg",
     "members": [
-      { "name": "あぐのむ", "x": "", "youtube": "" },
-      { "name": "たばた",   "x": "", "youtube": "" },
-      { "name": "ぱらちゃん","x": "", "youtube": "" },
-      { "name": "拓海",     "x": "", "youtube": "" }
+      { "name": "あぐのむ",   "x": "https://x.com/agunomomoclo", "youtube": "https://www.youtube.com/@%E3%81%82%E3%81%90%E3%81%AE%E3%82%80%E3%83%81%E3%83%A3%E3%83%B3%E3%83%8D%E3%83%AB" },
+      { "name": "たばた",     "x": "https://x.com/tbt_sv12",     "youtube": "https://www.youtube.com/@tbtsv12" },
+      { "name": "ぱらちゃん", "x": "https://x.com/para_chan_",   "youtube": "https://www.youtube.com/@para_channel" },
+      { "name": "拓海",       "x": "https://x.com/harkpokepoke", "youtube": "https://www.youtube.com/@takumi-x6s" }
     ]
   },
   {
@@ -74,7 +74,7 @@
     "tag": "RDL",
     "logo": "assets/images/riddle_logo.svg",
     "members": [
-      { "name": "折り紙",   "x": "", "youtube": "" },
+      { "name": "折り紙",   "x": "https://x.com/Origami_sv",   "youtube": "https://www.youtube.com/@%E6%8A%98%E3%82%8A%E7%B4%99-c6m" },
       { "name": "メンバー2","x": "", "youtube": "" },
       { "name": "メンバー3","x": "", "youtube": "" }
     ]
@@ -85,9 +85,9 @@
     "tag": "LVH",
     "logo": "assets/images/levanga_logo.svg",
     "members": [
-      { "name": "Era53",   "x": "", "youtube": "" },
-      { "name": "rikka",   "x": "", "youtube": "" },
-      { "name": "だーよね","x": "", "youtube": "" }
+      { "name": "Era53",   "x": "https://x.com/garbage_er",    "youtube": "https://www.youtube.com/@era5380" },
+      { "name": "rikka",   "x": "https://x.com/karakuri1646",  "youtube": "https://www.youtube.com/@rikka1646" },
+      { "name": "だーよね","x": "https://x.com/dayone_sha723", "youtube": "https://www.youtube.com/@daaayone_sv" }
     ]
   }
 ]
