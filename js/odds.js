@@ -552,14 +552,28 @@ function _doExpandWithBudget(id, budget) {
         return { ck, mid: oddsStr ? (getOddsMidpoint(oddsStr) || 1) : 1 };
     });
 
+    // Step1: 重みで初期配分（100pt単位切り捨て、最低100pt）
     const weights     = combOdds.map(c => 1 / c.mid);
     const totalWeight = weights.reduce((a, b) => a + b, 0);
-    const rawAmounts  = weights.map(w => Math.max(100, Math.floor((w / totalWeight * budget) / 100) * 100));
+    const amounts     = weights.map(w => Math.max(100, Math.floor((w / totalWeight * budget) / 100) * 100));
+
+    // Step2: 余りを計算
+    let remainder = budget - amounts.reduce((a, b) => a + b, 0);
+
+    // Step3: 余りを100ptずつ「現時点で払い戻しが最も少ない買い目」に追加
+    while (remainder >= 100) {
+        // 各買い目の現在の想定払い戻し = amount × odds
+        const returns = amounts.map((amt, i) => amt * combOdds[i].mid);
+        // 払い戻しが最小のインデックスに100pt追加
+        const minIdx = returns.indexOf(Math.min(...returns));
+        amounts[minIdx] += 100;
+        remainder -= 100;
+    }
 
     const insertIdx = cart.findIndex(i => i.id === id);
     const newItems  = combOdds.map((c, idx) => ({
         id: genId(), displayType: item.displayType, type: item.type,
-        formation: c.ck, combs: [c.ck], amountPerBet: rawAmounts[idx]
+        formation: c.ck, combs: [c.ck], amountPerBet: amounts[idx]
     }));
     cart.splice(insertIdx, 1, ...newItems);
     renderCart();
