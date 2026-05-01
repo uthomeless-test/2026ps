@@ -557,6 +557,13 @@ function _doExpandWithBudget(id, budget) {
     const totalWeight = weights.reduce((a, b) => a + b, 0);
     const amounts     = weights.map(w => Math.max(100, Math.floor((w / totalWeight * budget) / 100) * 100));
 
+    // 最低配分合計が予算を超える場合は中断
+    const minTotal = amounts.reduce((a, b) => a + b, 0);
+    if (minTotal > budget) {
+        alert(`点数が多すぎて予算内に収まりません。予算を増やすか、買い目を減らしてください。\n（最低配分: ${minTotal.toLocaleString()}pt / 設定予算: ${budget.toLocaleString()}pt）`);
+        return;
+    }
+
     // Step2: 余りを計算
     let remainder = budget - amounts.reduce((a, b) => a + b, 0);
 
