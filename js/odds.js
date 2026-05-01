@@ -42,7 +42,7 @@ function renderTeamHeader() {
     let h = '<tr>', t = '<tr>';
     teams.forEach((tm, i) => {
         h += `<th>${i + 1}</th>`;
-        t += `<td><img src="${tm.logo}" class="team-logo" alt="${tm.tag}"><br>${tm.name}</td>`;
+        t += `<td><img src="${tm.logo}" class="team-logo" alt="${tm.tag}"><br>${tm.tag}</td>`;
     });
     table.innerHTML = h + '</tr>' + t + '</tr>';
 }
@@ -140,19 +140,19 @@ function buildMsRows() {
         formation: '各行でそれぞれ選択したチームを組み合わせます',
         box:       '選択した全チームのボックス買いです',
         axis1: currentType === 'exacta'
-            ? '軸は1頭のみ（赤）。軸が1着・2着どちらにも絡む全パターンを購入します'
-            : '軸は1頭のみ（赤）。軸が1・2・3着どこにでも絡む全順列を購入します',
-        axis2: '軸は最大2頭まで（赤）。相手は複数選択可能です（3連単のみ）'
+            ? '軸は1チームのみ（赤）。軸が1着・2着どちらにも絡む全パターンを購入します'
+            : '軸は1チームのみ（赤）。軸が1・2・3着どこにでも絡む全順列を購入します',
+        axis2: '軸は最大2チームまで（赤）。相手は複数選択可能です（3連単のみ）'
     };
     document.getElementById('ms-hint').innerText = hints[voteMode] || '';
 }
 
 function getMsRowDefs() {
     if (voteMode === 'box')   return [{ label: 'ボックス', rowIdx: 0 }];
-    if (voteMode === 'axis1') return [{ label: '軸（1頭）', rowIdx: 0 }, { label: '相手', rowIdx: 1 }];
-    if (voteMode === 'axis2') return [{ label: '軸（2頭）', rowIdx: 0 }, { label: '相手', rowIdx: 1 }];
+    if (voteMode === 'axis1') return [{ label: '軸（1チーム）', rowIdx: 0 }, { label: '相手', rowIdx: 1 }];
+    if (voteMode === 'axis2') return [{ label: '軸（2チーム）', rowIdx: 0 }, { label: '相手', rowIdx: 1 }];
     const rows = (currentType === 'trio' || currentType === 'trifecta') ? 3 : 2;
-    return ['1頭目', '2頭目', '3頭目'].slice(0, rows).map((label, i) => ({ label, rowIdx: i }));
+    return ['1列目', '2列目', '3列目'].slice(0, rows).map((label, i) => ({ label, rowIdx: i }));
 }
 
 function toggleMs(ri, num) {
@@ -291,6 +291,7 @@ function setMarksheet() {
     }
     cart.push({ id: genId(), displayType: `${displayType}(${modeNames[voteMode]})`, type: currentType, formation: formationStr, combs, amountPerBet: 100 });
     renderCart();
+    document.getElementById('bet-management').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
 function setSortMode(mode) {
@@ -373,6 +374,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         cart.push({ id: genId(), displayType, type: betType, formation: combKey, combs: [combKey], amountPerBet: 100 });
         renderCart();
+        document.getElementById('bet-management').scrollIntoView({ behavior: 'smooth', block: 'start' });
         row.style.transition = 'none';
         row.style.backgroundColor = '#ffe082';
         setTimeout(() => { row.style.transition = 'background 0.4s'; row.style.backgroundColor = ''; }, 150);

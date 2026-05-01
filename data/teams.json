@@ -59,7 +59,7 @@
   {
     "id": 6,
     "name": "REJECT",
-    "tag": "RJC",
+    "tag": "RC",
     "logo": "assets/images/reject_logo.svg",
     "members": [
       { "name": "あぐのむ", "x": "", "youtube": "" },
