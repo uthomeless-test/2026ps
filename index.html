@@ -115,8 +115,6 @@
         }
         .row-predictor.even-row .cell { background: #f8f8f8; }
 
-        .row-mymark { display: none; }
-
         .row-odds .cell { font-weight: bold; font-size: 1em; background: #f4f4f4; min-height: 34px; }
         .odds-low  { color: #d00; }
         .odds-dark { color: #111; }
@@ -143,6 +141,7 @@
 <nav class="page-nav">
     <a href="index.html" class="active">出馬表</a>
     <a href="odds.html">オッズ</a>
+    <a href="help.html">使い方</a>
 </nav>
 
 <div class="section-title">出馬表 — Premier Series 26-27</div>
@@ -177,8 +176,6 @@ const MARKS = [
     { key:'renka',  label:'⟁', file:'assets/marks/mark_renka.svg'  },
     { key:'osae',   label:'△', file:'assets/marks/mark_osae.svg'   },
 ];
-const MY_MARKS_KEY = 'mymarks_ps2627';
-let myMarks = JSON.parse(localStorage.getItem(MY_MARKS_KEY) || '{}');
 let teamsData = [], oddsData = {}, predictionsData = [];
 
 window.addEventListener('DOMContentLoaded', async () => {
@@ -213,7 +210,6 @@ function renderSeimai() {
         { cls:'row-name',    text:'チーム名' },
         { cls:'row-members', text:'メンバー' },
         ...predictionsData.map(p => ({ cls:'row-predictor', text: p.name })),
-        { cls:'row-mymark',  text:'自分' },
         { cls:'row-odds',    text:'単勝' },
     ];
     labelDefs.forEach(d => {
@@ -256,10 +252,6 @@ function renderSeimai() {
             pWrap.appendChild(makeMarkCell(markKey));
             col.appendChild(pWrap);
         });
-
-        const myWrap = document.createElement('div'); myWrap.className = 'row-mymark';
-        myWrap.appendChild(makeMarkCell(myMarks[String(team.id)]));
-        col.appendChild(myWrap);
 
         const oddsVal = (oddsData.win || {})[String(team.id)] || '---';
         const oddsWrap = document.createElement('div'); oddsWrap.className = 'row-odds';
