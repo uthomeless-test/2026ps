@@ -347,7 +347,7 @@ function renderWinPlace() {
         place: (oddsData.place || {})[i + 1]
     }));
     if (sortMode === 'pop') list.sort((a, b) => parseFloat(a.win) - parseFloat(b.win));
-    let html = `<table class="list-table"><thead><tr><th>#</th><th>チーム</th><th>単勝</th><th>複勝</th></tr></thead><tbody>`;
+    let html = `<table class="list-table"><thead><tr><th>番号</th><th>チーム</th><th>単勝</th><th>複勝</th></tr></thead><tbody>`;
     list.forEach(item => {
         html += `<tr class="odds_row" data-no="${item.no}">
             <td>${item.no}</td><td>${item.tag}</td>
@@ -558,14 +558,39 @@ function _doExpandWithBudget(id, budget) {
     renderCart();
 }
 
-// ── Googleフォーム出力 ───────────────────────────────
+// ── フォーム出力 ─────────────────────────────────────
+const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSd3lkH75uSufuwNEllHmrXZQmxXnq-w1T2SBLne6kO7JiUJvA/viewform';
+
 function prepareGoogleForm() {
     if (cart.length === 0) return alert('買い目がありません');
-    let exportData = '【eスポーツ投票データ】\n';
+    let exportData = '【Premier Series 26-27 買い目】\n';
     cart.forEach(item => {
         exportData += `[${item.displayType}] ${item.formation} / ${item.combs.length}点 / 各${item.amountPerBet}pt / 計${item.combs.length * item.amountPerBet}pt\n`;
     });
-    exportData += `------------------\n合計購入金額: ${document.getElementById('total-bet-amount').innerText}pt`;
+    exportData += `------------------\n合計: ${document.getElementById('total-bet-amount').innerText}pt`;
     document.getElementById('form-data-text').value = exportData;
+    document.getElementById('copy-feedback').style.display = 'none';
+    document.getElementById('btn-copy').textContent = '📋 コピーする';
     document.getElementById('form-export-area').classList.remove('hidden');
+}
+
+function copyFormData() {
+    const text = document.getElementById('form-data-text').value;
+    if (!text) return;
+    navigator.clipboard.writeText(text).then(() => {
+        const fb = document.getElementById('copy-feedback');
+        const btn = document.getElementById('btn-copy');
+        fb.style.display = 'inline';
+        btn.textContent = '✔ コピー済み';
+        setTimeout(() => {
+            fb.style.display = 'none';
+            btn.textContent = '📋 コピーする';
+        }, 3000);
+    }).catch(() => {
+        // clipboard API非対応時のフォールバック
+        const ta = document.getElementById('form-data-text');
+        ta.select();
+        document.execCommand('copy');
+        alert('コピーしました');
+    });
 }
