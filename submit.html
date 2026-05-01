@@ -46,7 +46,7 @@
     買い目の内容を確認し、コピーしてGoogleフォームに送信してください。
 </p>
 <div style="font-size:.85em;background:#f0f4ff;border-left:3px solid #003399;padding:8px 12px;margin-bottom:16px;line-height:1.7;">
-    📌 <strong>買い目の送信は必須です。</strong>印（◎○▲など）の入力は任意です。印なしでも参加できます。
+    📌 <strong>買い目の送信は必須です。</strong><strong>印（◎○▲など）の入力は任意です。</strong>印なしでも参加できます。
 </div>
 
 <!-- 印の確認 -->
@@ -77,14 +77,16 @@
     <div style="margin-top:10px;font-size:.85em;color:#555;">
         コピーしたら、Googleフォームの「買い目・印」欄に貼り付けて送信してください。
     </div>
-    <a id="form-open-btn" href="#" target="_blank" class="form-open-btn"
-       onclick="this.href=GOOGLE_FORM_URL">📝 Googleフォームを開く</a>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLSd3lkH75uSufuwNEllHmrXZQmxXnq-w1T2SBLne6kO7JiUJvA/viewform?usp=header"
+       target="_blank" class="form-open-btn">📝 Googleフォームを開く</a>
 </div>
 
 </div>
 
 <script src="js/common.js"></script>
 <script>
+const MY_MARKS_KEY  = 'mymarks_ps2627';
+const CART_STORAGE_KEY = 'cart_ps2627';
 const UNIQUE_MARKS  = ['honmei','taikou','tanana','renka'];
 const MARK_LABELS   = { honmei:'◎', taikou:'○', tanana:'▲', renka:'⟁', osae:'△' };
 const MARK_FILES    = {
@@ -114,13 +116,10 @@ window.addEventListener('DOMContentLoaded', async () => {
 function renderMarksCheck() {
     const el = document.getElementById('marks-check');
     if (!teamsData.length) { el.innerHTML = '<span class="status-warn">読み込み中...</span>'; return; }
-    const hasHonmei = Object.values(selectedMarks).includes('honmei');
     const hasAnyMark = Object.values(selectedMarks).some(v => v !== '');
     const statusHtml = !hasAnyMark
         ? '<span style="color:#888;font-size:.82em;">印なし（任意のため問題ありません）</span>'
-        : hasHonmei
-            ? '<span class="status-ok">✔ 印入力済み</span>'
-            : '<span class="status-warn">⚠️ ◎が付いていません（印を送る場合は◎必須）</span>';
+        : '<span class="status-ok">✔ 印入力済み</span>';
     // ◎○▲⟁△の順でソート
     const MARK_ORDER = ['honmei','taikou','tanana','renka','osae'];
     const chipsByMark = [];
@@ -151,10 +150,6 @@ function renderBetsCheck() {
 function checkWarnings() {
     const warnBox = document.getElementById('warn-box');
     const warnings = [];
-    // 印は任意のため未入力は警告しない。ただし印を付けた場合は◎必須
-    const hasAnyMark = Object.values(selectedMarks).some(v => v !== '');
-    const hasHonmei = Object.values(selectedMarks).includes('honmei');
-    if (hasAnyMark && !hasHonmei) warnings.push('印を付ける場合は◎（本命）が必須です');
     if (!cart.length) warnings.push('買い目がありません（買い目は送信必須です）');
     if (warnings.length) {
         warnBox.style.display = 'block';
