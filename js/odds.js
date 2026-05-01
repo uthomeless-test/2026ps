@@ -552,27 +552,23 @@ function _doExpandWithBudget(id, budget) {
         return { ck, mid: oddsStr ? (getOddsMidpoint(oddsStr) || 1) : 1 };
     });
 
-    // Step1: 重みで初期配分（100pt単位切り捨て、最低100pt）
-    const weights     = combOdds.map(c => 1 / c.mid);
-    const totalWeight = weights.reduce((a, b) => a + b, 0);
-    const amounts     = weights.map(w => Math.max(100, Math.floor((w / totalWeight * budget) / 100) * 100));
+    const n = item.combs.length;
+    const minTotal = n * 100;
 
-    // 最低配分合計が予算を超える場合は中断
-    const minTotal = amounts.reduce((a, b) => a + b, 0);
+    // 最低100pt×点数が予算を超える場合は中断
     if (minTotal > budget) {
-        alert(`点数が多すぎて予算内に収まりません。予算を増やすか、買い目を減らしてください。\n（最低配分: ${minTotal.toLocaleString()}pt / 設定予算: ${budget.toLocaleString()}pt）`);
+        alert(`点数が多すぎて予算内に収まりません。予算を増やすか、買い目を減らしてください。\n（最低必要: ${minTotal.toLocaleString()}pt / 設定予算: ${budget.toLocaleString()}pt）`);
         return;
     }
 
-    // Step2: 余りを計算
-    let remainder = budget - amounts.reduce((a, b) => a + b, 0);
+    // Step1: 全点に最低100ptを配分
+    const amounts = combOdds.map(() => 100);
 
-    // Step3: 余りを100ptずつ「現時点で払い戻しが最も少ない買い目」に追加
+    // Step2: 残り予算を払い戻し均一になるよう100ptずつ追加
+    let remainder = budget - minTotal;
     while (remainder >= 100) {
-        // 各買い目の現在の想定払い戻し = amount × odds
         const returns = amounts.map((amt, i) => amt * combOdds[i].mid);
-        // 払い戻しが最小のインデックスに100pt追加
-        const minIdx = returns.indexOf(Math.min(...returns));
+        const minIdx  = returns.indexOf(Math.min(...returns));
         amounts[minIdx] += 100;
         remainder -= 100;
     }
