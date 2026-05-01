@@ -113,7 +113,7 @@
             min-height: calc(var(--mark-size) + 16px);
             background: #fff;
         }
-        .team-col:nth-child(even) .row-predictor .cell { background: #f8f8f8; }
+        .row-predictor.even-row .cell { background: #f8f8f8; }
 
         .row-mymark { display: none; }
 
@@ -249,9 +249,10 @@ function renderSeimai() {
         });
         mWrap.appendChild(mCell); col.appendChild(mWrap);
 
-        predictionsData.forEach(pred => {
+        predictionsData.forEach((pred, pi) => {
             const markKey = pred.marks[String(team.id)];
-            const pWrap = document.createElement('div'); pWrap.className = 'row-predictor';
+            const pWrap = document.createElement('div');
+            pWrap.className = 'row-predictor' + (pi % 2 === 1 ? ' even-row' : '');
             pWrap.appendChild(makeMarkCell(markKey));
             col.appendChild(pWrap);
         });
