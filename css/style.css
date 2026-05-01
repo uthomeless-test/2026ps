@@ -393,7 +393,7 @@ table.odds-list tr.odds_row td[data-clickable]:hover {
     z-index: 1000;
     background: #fff;
     padding: 8px 16px;
-    margin: 0 -10px 16px;
+    margin: 0 0 16px;
     border-bottom: 2px solid var(--jra-blue);
     box-shadow: 0 2px 6px rgba(0,0,0,.08);
 }
