@@ -8,7 +8,6 @@
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <link rel="stylesheet" href="css/style.css">
     <style>
-        /* ── JRA枠色 ── */
         :root {
             --frame-1: #fff;    --frame-1-text: #111;
             --frame-2: #111;    --frame-2-text: #fff;
@@ -23,36 +22,29 @@
             --mark-size: 32px;
         }
 
-        /* ── ページ外枠 ── */
-        .page-inner {
-            max-width: 1100px;
-            margin: 0 auto;
-            padding: 0 16px;
-        }
+        .page-inner { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
 
-        /* ── 出馬表外枠 ── */
         .seimai-outer {
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
             margin: 12px 0 24px;
         }
 
-        /* テーブル本体：ラベル列（左）＋チーム列（左→右） */
+        /* テーブル本体：width:max-contentで左寄せ、右端にラベル列 */
         .seimai-table {
             display: flex;
-            flex-direction: row;
-            min-width: max-content;
+            flex-direction: row-reverse;
+            width: max-content;
             border: 2px solid #222;
             background: #faf6ee;
         }
 
-        /* ── ラベル列（左端） ── */
         .label-col {
             width: var(--label-width);
             display: flex;
             flex-direction: column;
             background: #f0ece0;
-            border-right: 2px solid #222;
+            border-left: 2px solid #222;
             flex-shrink: 0;
         }
         .label-col .cell {
@@ -63,43 +55,34 @@
             text-align: center;
             background: #f0ece0;
         }
-        .label-col .row-num  { background: #222; }
-        .label-col .row-num .cell  { color: #fff; }
+        .label-col .row-num { background: #222; }
+        .label-col .row-num .cell { color: #fff; }
         .label-col .row-odds { background: #fff0a0; }
         .label-col .row-odds .cell { color: #333; }
 
-        /* ── チーム列 ── */
         .team-col {
             width: var(--col-width);
-            border-right: 1px solid #bbb;
+            border-left: 1px solid #bbb;
             display: flex;
             flex-direction: column;
         }
-        .team-col:last-child { border-right: none; }
+        .team-col:last-child { border-left: none; }
 
-        /* ── 共通セル ── */
         .cell {
             border-bottom: 1px solid #ccc;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
-            padding: 4px 4px;
+            padding: 4px;
             font-size: .82em;
             min-height: 32px;
             box-sizing: border-box;
             width: 100%;
         }
 
-        /* ── 番号行 ── */
-        .row-num .cell {
-            font-size: 1.15em;
-            font-weight: 900;
-            min-height: 36px;
-            border-bottom: 2px solid #222;
-        }
-        /* 各枠色 */
-        .frame-1 .row-num .cell { background: var(--frame-1); color: var(--frame-1-text); border: 1px solid #aaa; }
+        .row-num .cell { font-size: 1.15em; font-weight: 900; min-height: 36px; border-bottom: 2px solid #222; }
+        .frame-1 .row-num .cell { background: var(--frame-1); color: var(--frame-1-text); border-bottom: 2px solid #888; }
         .frame-2 .row-num .cell { background: var(--frame-2); color: var(--frame-2-text); }
         .frame-3 .row-num .cell { background: var(--frame-3); color: var(--frame-3-text); }
         .frame-4 .row-num .cell { background: var(--frame-4); color: var(--frame-4-text); }
@@ -108,130 +91,36 @@
         .frame-7 .row-num .cell { background: var(--frame-7); color: var(--frame-7-text); }
         .frame-8 .row-num .cell { background: var(--frame-8); color: var(--frame-8-text); }
 
-        /* ── ロゴ行 ── */
-        .row-logo .cell {
-            min-height: 72px;
-            background: #fff;
-        }
-        .row-logo .cell img {
-            width: 56px;
-            height: 56px;
-            object-fit: contain;
-        }
-        .logo-placeholder {
-            width: 56px; height: 56px;
-            background: #ddd; border-radius: 4px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: .75em; font-weight: bold; color: #555;
-        }
+        .row-logo .cell { min-height: 72px; background: #fff; }
+        .row-logo .cell img { width: 56px; height: 56px; object-fit: contain; }
+        .logo-placeholder { width: 56px; height: 56px; background: #ddd; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: .75em; font-weight: bold; color: #555; }
 
-        /* ── チーム名行 ── */
-        .row-name .cell {
-            font-weight: bold;
-            font-size: .8em;
-            min-height: 40px;
-            line-height: 1.4;
-            background: #fff;
-            word-break: keep-all;
-            overflow-wrap: break-word;
-            white-space: normal;
-            padding: 4px 6px;
-        }
+        .row-name .cell { font-weight: bold; font-size: .8em; min-height: 40px; line-height: 1.4; background: #fff; white-space: normal; padding: 4px 6px; word-break: keep-all; overflow-wrap: break-word; }
 
-        /* ── メンバー行 ── */
-        .row-members .cell {
-            flex-direction: column;
-            gap: 3px;
-            min-height: 88px;
-            background: #fafafa;
-            padding: 5px 3px;
-            align-items: center;
-        }
-        .member-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: .78em;
-            color: #003399;
-            padding: 1px 3px;
-            text-decoration: underline;
-            max-width: calc(var(--col-width) - 8px);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+        .row-members .cell { flex-direction: column; gap: 3px; min-height: 88px; background: #fafafa; padding: 5px 3px; align-items: center; }
+        .member-btn { background: none; border: none; cursor: pointer; font-size: .78em; color: #003399; padding: 1px 3px; text-decoration: underline; max-width: calc(var(--col-width) - 8px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .member-btn:hover { color: #e91e63; }
 
-        /* ── 予想家印行 ── */
-        .row-predictor .cell {
-            min-height: 40px;
-            background: #fffef5;
-        }
+        .row-predictor .cell { min-height: 40px; background: #fffef5; }
         .team-col:nth-child(even) .row-predictor .cell { background: #f7f7ec; }
 
-        /* ── 自分の印行（非表示・コード保持） ── */
         .row-mymark { display: none; }
 
-        /* ── 単勝オッズ行 ── */
-        .row-odds .cell {
-            font-weight: bold;
-            font-size: 1em;
-            background: #fff8e1;
-            min-height: 34px;
-        }
+        .row-odds .cell { font-weight: bold; font-size: 1em; background: #fff8e1; min-height: 34px; }
         .odds-low  { color: #d00; }
         .odds-dark { color: #111; }
 
-        /* ── 印画像 ── */
-        .mark-img {
-            width: var(--mark-size);
-            height: var(--mark-size);
-            object-fit: contain;
-            display: block;
-        }
+        .mark-img { width: var(--mark-size); height: var(--mark-size); object-fit: contain; display: block; }
 
-        /* ── メンバーポップアップ ── */
-        #member-popup {
-            position: fixed;
-            background: #fff;
-            border: 2px solid #003399;
-            border-radius: 8px;
-            padding: 14px 18px;
-            box-shadow: 0 4px 20px rgba(0,0,0,.3);
-            z-index: 3000;
-            min-width: 200px;
-            max-width: 280px;
-        }
-        #member-popup h4 {
-            margin: 0 0 10px;
-            font-size: 1em;
-            color: #003399;
-            border-bottom: 1px solid #ccc;
-            padding-bottom: 6px;
-        }
+        #member-popup { position: fixed; background: #fff; border: 2px solid #003399; border-radius: 8px; padding: 14px 18px; box-shadow: 0 4px 20px rgba(0,0,0,.3); z-index: 3000; min-width: 200px; max-width: 280px; }
+        #member-popup h4 { margin: 0 0 10px; font-size: 1em; color: #003399; border-bottom: 1px solid #ccc; padding-bottom: 6px; }
         .popup-links { display: flex; flex-direction: column; gap: 6px; }
-        .popup-links a {
-            display: flex; align-items: center; gap: 6px;
-            color: #003399; text-decoration: none;
-            font-size: .9em; padding: 4px 8px;
-            border-radius: 4px; border: 1px solid #ccc;
-        }
+        .popup-links a { display: flex; align-items: center; gap: 6px; color: #003399; text-decoration: none; font-size: .9em; padding: 4px 8px; border-radius: 4px; border: 1px solid #ccc; }
         .popup-links a:hover { background: #eef; }
         .popup-links .no-link { color: #999; font-size: .85em; }
-        #member-popup-close {
-            position: absolute; top: 6px; right: 10px;
-            background: none; border: none;
-            font-size: 1.2em; cursor: pointer; color: #666;
-        }
+        #member-popup-close { position: absolute; top: 6px; right: 10px; background: none; border: none; font-size: 1.2em; cursor: pointer; color: #666; }
 
-        /* ── 凡例 ── */
-        .mark-legend {
-            display: flex; gap: 14px; flex-wrap: wrap;
-            align-items: center; padding: 8px 12px;
-            background: #f5f5f5; border: 1px solid #ddd;
-            border-radius: 4px; margin-bottom: 12px;
-            font-size: .82em;
-        }
+        .mark-legend { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; padding: 8px 12px; background: #f5f5f5; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 12px; font-size: .82em; }
         .mark-legend-item { display: flex; align-items: center; gap: 4px; }
         .mark-legend-item img { width: 22px; height: 22px; }
     </style>
@@ -260,9 +149,8 @@
     <div class="seimai-table" id="seimai-table"></div>
 </div>
 
-</div><!-- /.page-inner -->
+</div>
 
-<!-- メンバーポップアップ -->
 <div id="member-popup" style="display:none;">
     <button id="member-popup-close" onclick="closePopup()">✕</button>
     <h4 id="popup-member-name"></h4>
@@ -293,8 +181,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         renderSeimai();
     } catch(e) {
         console.error(e);
-        document.querySelector('.seimai-outer').innerHTML =
-            '<p style="padding:20px;color:#d00;">データの読み込みに失敗しました。</p>';
+        document.querySelector('.seimai-outer').innerHTML = '<p style="padding:20px;color:#d00;">データの読み込みに失敗しました。</p>';
     }
 });
 
@@ -302,17 +189,16 @@ function renderSeimai() {
     const table = document.getElementById('seimai-table');
     table.innerHTML = '';
 
-    // ── ラベル列（左端） ──
     const labelCol = document.createElement('div');
     labelCol.className = 'label-col';
     const labelDefs = [
-        { cls:'row-num',      text:'番号' },
-        { cls:'row-logo',     text:'' },
-        { cls:'row-name',     text:'チーム名' },
-        { cls:'row-members',  text:'メンバー' },
+        { cls:'row-num',     text:'番号' },
+        { cls:'row-logo',    text:'' },
+        { cls:'row-name',    text:'チーム名' },
+        { cls:'row-members', text:'メンバー' },
         ...predictionsData.map(p => ({ cls:'row-predictor', text: p.name })),
-        { cls:'row-mymark',   text:'自分' },
-        { cls:'row-odds',     text:'単勝' },
+        { cls:'row-mymark',  text:'自分' },
+        { cls:'row-odds',    text:'単勝' },
     ];
     labelDefs.forEach(d => {
         const wrap = document.createElement('div'); wrap.className = d.cls;
@@ -322,30 +208,21 @@ function renderSeimai() {
     });
     table.appendChild(labelCol);
 
-    // ── チーム列（1番から順に左→右） ──
     teamsData.forEach(team => {
         const col = document.createElement('div');
         col.className = `team-col frame-${team.id}`;
 
-        // 番号
         addCell(col, 'row-num', String(team.id));
 
-        // ロゴ
         const logoWrap = document.createElement('div'); logoWrap.className = 'row-logo';
         const logoCell = document.createElement('div'); logoCell.className = 'cell';
         const img = document.createElement('img');
         img.src = team.logo; img.alt = team.tag;
-        img.onerror = () => {
-            const ph = document.createElement('div');
-            ph.className = 'logo-placeholder'; ph.textContent = team.tag;
-            logoCell.replaceChild(ph, img);
-        };
+        img.onerror = () => { const ph = document.createElement('div'); ph.className = 'logo-placeholder'; ph.textContent = team.tag; logoCell.replaceChild(ph, img); };
         logoCell.appendChild(img); logoWrap.appendChild(logoCell); col.appendChild(logoWrap);
 
-        // チーム名
         addCell(col, 'row-name', team.name);
 
-        // メンバー
         const mWrap = document.createElement('div'); mWrap.className = 'row-members';
         const mCell = document.createElement('div'); mCell.className = 'cell';
         team.members.forEach(m => {
@@ -356,7 +233,6 @@ function renderSeimai() {
         });
         mWrap.appendChild(mCell); col.appendChild(mWrap);
 
-        // 予想家印
         predictionsData.forEach(pred => {
             const markKey = pred.marks[String(team.id)];
             const pWrap = document.createElement('div'); pWrap.className = 'row-predictor';
@@ -364,12 +240,10 @@ function renderSeimai() {
             col.appendChild(pWrap);
         });
 
-        // 自分の印（非表示・コード保持）
         const myWrap = document.createElement('div'); myWrap.className = 'row-mymark';
-        const myCell = makeMarkCell(myMarks[String(team.id)]);
-        myWrap.appendChild(myCell); col.appendChild(myWrap);
+        myWrap.appendChild(makeMarkCell(myMarks[String(team.id)]));
+        col.appendChild(myWrap);
 
-        // 単勝オッズ
         const oddsVal = (oddsData.win || {})[String(team.id)] || '---';
         const oddsWrap = document.createElement('div'); oddsWrap.className = 'row-odds';
         const oddsCell = document.createElement('div'); oddsCell.className = 'cell';
@@ -402,7 +276,6 @@ function makeMarkCell(markKey) {
     return cell;
 }
 
-// メンバーポップアップ
 function openMemberPopup(member, anchor) {
     const popup = document.getElementById('member-popup');
     document.getElementById('popup-member-name').textContent = member.name;
@@ -411,14 +284,8 @@ function openMemberPopup(member, anchor) {
     if (!member.x && !member.youtube) {
         links.innerHTML = '<span class="no-link">リンク情報なし</span>';
     } else {
-        if (member.x) {
-            const a = document.createElement('a'); a.href = member.x; a.target = '_blank';
-            a.innerHTML = '<span>𝕏</span> X (Twitter)'; links.appendChild(a);
-        }
-        if (member.youtube) {
-            const a = document.createElement('a'); a.href = member.youtube; a.target = '_blank';
-            a.innerHTML = '<span>▶</span> YouTube'; links.appendChild(a);
-        }
+        if (member.x) { const a = document.createElement('a'); a.href = member.x; a.target = '_blank'; a.innerHTML = '<span>𝕏</span> X (Twitter)'; links.appendChild(a); }
+        if (member.youtube) { const a = document.createElement('a'); a.href = member.youtube; a.target = '_blank'; a.innerHTML = '<span>▶</span> YouTube'; links.appendChild(a); }
     }
     popup.style.display = 'block';
     const rect = anchor.getBoundingClientRect();
@@ -427,10 +294,9 @@ function openMemberPopup(member, anchor) {
     if (left + pw > window.innerWidth - 10) left = window.innerWidth - pw - 10;
     if (left < 10) left = 10;
     popup.style.left = left + 'px';
-    popup.style.top  = (rect.bottom + window.scrollY + 6) + 'px';
+    popup.style.top = (rect.bottom + window.scrollY + 6) + 'px';
 }
 function closePopup() { document.getElementById('member-popup').style.display = 'none'; }
-
 document.addEventListener('click', () => { closePopup(); });
 </script>
 </body>
