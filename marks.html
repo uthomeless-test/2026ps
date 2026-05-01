@@ -149,27 +149,24 @@
     <div class="formation-row">
         <label>1列目（軸）</label>
         <select class="formation-select" id="f-row0" onchange="updateFormationPreview()">
-            <option value="honmei">◎ 本命のみ</option>
-            <option value="honmei_taikou">◎ + ○</option>
-            <option value="honmei_taikou_tanana">◎〜▲ 上位3印</option>
+            <option value="honmei">◎</option>
+            <option value="honmei_taikou">◎ ○</option>
             <option value="all_marked">印あり全部</option>
         </select>
     </div>
     <div class="formation-row">
         <label>2列目</label>
         <select class="formation-select" id="f-row1" onchange="updateFormationPreview()">
-            <option value="taikou">○ 対抗のみ</option>
-            <option value="taikou_tanana">○ + ▲</option>
-            <option value="taikou_tanana_renka">○〜⟁ 上位3印</option>
+            <option value="taikou">○</option>
+            <option value="taikou_tanana">○ ▲</option>
             <option value="all_marked" selected>印あり全部</option>
         </select>
     </div>
     <div class="formation-row" id="f-row2-wrap">
         <label>3列目</label>
         <select class="formation-select" id="f-row2" onchange="updateFormationPreview()">
-            <option value="tanana">▲ 単穴のみ</option>
-            <option value="tanana_renka">▲ + ⟁</option>
-            <option value="tanana_renka_osae">▲〜△ 下位3印</option>
+            <option value="tanana">▲</option>
+            <option value="tanana_renka">▲ ⟁</option>
             <option value="all_marked" selected>印あり全部</option>
         </select>
     </div>
@@ -357,7 +354,7 @@ function goToOddsWithFormation() {
     const r2=getTeamsByMarkGroup(document.getElementById('f-row2').value);
     if(!r0.length){alert('1列目に該当するチームがありません。先に印を付けてください。');return;}
     const p=new URLSearchParams({tab:type,mode:'formation',r0:r0.join(','),r1:r1.join(','),r2:r2.join(',')});
-    window.location.href=`odds.html?${p.toString()}`;
+    p.append('apply','1'); window.location.href=`odds.html?${p.toString()}`;
 }
 
 // ── ロゴプリロード ──

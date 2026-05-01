@@ -54,10 +54,17 @@ window.addEventListener('DOMContentLoaded', async () => {
                 updateMsCombCount();
                 saveMsState();
                 render();
-                // マークシートまでスクロール
-                setTimeout(() => {
-                    document.getElementById('marksheet-area').scrollIntoView({ behavior:'smooth', block:'start' });
-                }, 300);
+                // apply=1 のときはオッズ表示まで自動実行
+                if (urlParams.get('apply') === '1') {
+                    applyMarksheet();
+                    setTimeout(() => {
+                        document.getElementById('main-view').scrollIntoView({ behavior:'smooth', block:'start' });
+                    }, 300);
+                } else {
+                    setTimeout(() => {
+                        document.getElementById('marksheet-area').scrollIntoView({ behavior:'smooth', block:'start' });
+                    }, 300);
+                }
             }
         } else {
             const savedTab = localStorage.getItem(TAB_STORAGE_KEY) || 'win-place';
