@@ -133,19 +133,24 @@ body {
     border-collapse: collapse;
     background: #fff;
     margin-bottom: 6px;
+    table-layout: fixed;
 }
 .ms-table th,
 .ms-table td {
     border: 1px solid var(--border-color);
-    padding: 4px;
+    padding: 4px 2px;
     text-align: center;
     font-size: .85em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 .ms-table th { background: #e9e9e9; }
 .ms-row-label {
     font-weight: bold;
     background: #f8f9fa;
     white-space: nowrap;
+    width: 5em;
 }
 .ms-cell {
     cursor: pointer;
@@ -163,8 +168,12 @@ body {
     font-size: .8em;
 }
 
-/* ── ソートボタン ── */
-.sort-controls { margin: 15px 0 5px; }
+/* ── ソートバー（全タブ共通） ── */
+.sort-controls {
+    margin: 10px 0 0;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-color);
+}
 .sort-btn {
     padding: 5px 15px;
     cursor: pointer;
@@ -201,6 +210,12 @@ table.list-table { width: 100%; border-collapse: collapse; }
 .odds_row { cursor: pointer; transition: background .15s; }
 .odds_row:hover  { background: #fff9c4 !important; }
 .odds_row:active { background: #ffe082 !important; }
+
+/* 単複：ホバー中のセルだけ色を濃くしてどちらを押すか明示 */
+.odds_row td[data-bet-type]:hover {
+    background: #ffe082 !important;
+    cursor: pointer;
+}
 
 /* ── カート ── */
 #bet-management {

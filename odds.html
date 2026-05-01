@@ -28,6 +28,11 @@
     <li data-type="trifecta"  onclick="switchTab('trifecta',this)">3連単</li>
 </ul>
 
+<div class="sort-controls" id="sort-bar">
+    <button id="btn-num" class="sort-btn active" onclick="setSortMode('num')">番号順</button>
+    <button id="btn-pop" class="sort-btn"        onclick="setSortMode('pop')">人気順</button>
+</div>
+
 <div class="vote-mode-bar hidden" id="vote-mode-bar">
     <button class="mode-btn active" data-mode="formation" onclick="switchVoteMode('formation',this)">フォーメーション</button>
     <button class="mode-btn"        data-mode="box"       onclick="switchVoteMode('box',this)">ボックス</button>
@@ -46,20 +51,11 @@
     <div class="result-bar">
         <div>組合せ: <span id="ms-comb-count" style="color:#ffeb3b;font-size:1.2em;font-weight:bold;">0</span> 通り</div>
         <div>
-            <select id="ms-sort-select" style="padding:5px;">
-                <option value="num">番号順</option>
-                <option value="pop">人気順</option>
-            </select>
             <button class="odd_view" onclick="applyMarksheet()">オッズを表示</button>
             <button type="button" class="btn-set-formation" onclick="setMarksheet()">買い目をセット</button>
         </div>
     </div>
     <div id="ms-hint" style="font-size:.8em;color:#555;margin-top:6px;padding:4px 6px;background:#fff;border-radius:3px;"></div>
-</div>
-
-<div class="sort-controls" id="simple-sort">
-    <button id="btn-num" class="sort-btn active" onclick="setSortMode('num')">番号順</button>
-    <button id="btn-pop" class="sort-btn"        onclick="setSortMode('pop')">人気順</button>
 </div>
 
 <div id="main-view"></div>

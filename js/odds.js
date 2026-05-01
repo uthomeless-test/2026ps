@@ -56,18 +56,15 @@ function switchTab(type, el) {
 
     const modeBar  = document.getElementById('vote-mode-bar');
     const msArea   = document.getElementById('marksheet-area');
-    const ssArea   = document.getElementById('simple-sort');
     const axis1Btn = document.getElementById('btn-axis1');
     const axis2Btn = document.getElementById('btn-axis2');
 
     if (type === 'win-place') {
         modeBar.classList.add('hidden');
         msArea.classList.add('hidden');
-        ssArea.classList.remove('hidden');
     } else {
         modeBar.classList.remove('hidden');
         msArea.classList.remove('hidden');
-        ssArea.classList.add('hidden');
 
         if (type === 'exacta') {
             axis1Btn.style.display = '';
@@ -274,7 +271,6 @@ function getMsCombinations() {
 function applyMarksheet() {
     const combs = getMsCombinations();
     filterMode = combs.length > 0;
-    sortMode   = document.getElementById('ms-sort-select').value;
     render();
 }
 
