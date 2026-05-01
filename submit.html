@@ -42,13 +42,16 @@
 
 <div class="section-title">買い目を送る</div>
 
-<p style="font-size:.9em;line-height:1.8;margin-bottom:16px;">
-    印と買い目の内容を確認し、コピーしてGoogleフォームに送信してください。
+<p style="font-size:.9em;line-height:1.8;margin-bottom:8px;">
+    買い目の内容を確認し、コピーしてGoogleフォームに送信してください。
 </p>
+<div style="font-size:.85em;background:#f0f4ff;border-left:3px solid #003399;padding:8px 12px;margin-bottom:16px;line-height:1.7;">
+    📌 <strong>買い目の送信は必須です。</strong>印（◎○▲など）の入力は任意です。印なしでも参加できます。
+</div>
 
 <!-- 印の確認 -->
 <div class="check-section">
-    <h3>印の確認 <a class="edit-link" href="marks.html">← 修正する</a></h3>
+    <h3>印の確認 <span style="font-size:.78em;color:#888;font-weight:normal;">（任意）</span> <a class="edit-link" href="marks.html">← 修正する</a></h3>
     <div id="marks-check"></div>
 </div>
 
@@ -114,15 +117,23 @@ function renderMarksCheck() {
     const el = document.getElementById('marks-check');
     if (!teamsData.length) { el.innerHTML = '<span class="status-warn">読み込み中...</span>'; return; }
     const hasHonmei = Object.values(selectedMarks).includes('honmei');
-    const statusHtml = hasHonmei
-        ? '<span class="status-ok">✔ 本命（◎）入力済み</span>'
-        : '<span class="status-warn">⚠️ 本命（◎）が付いていません</span>';
-    const chips = teamsData.map(team => {
-        const m = selectedMarks[String(team.id)];
-        if (!m) return '';
-        return `<div class="mark-chip"><img src="${MARK_FILES[m]}" alt="${MARK_LABELS[m]}">${team.tag}</div>`;
-    }).filter(Boolean).join('');
-    el.innerHTML = `${statusHtml}<div class="mark-row">${chips || '<span style="color:#999;font-size:.85em;">印が付いていません</span>'}</div>`;
+    const hasAnyMark = Object.values(selectedMarks).some(v => v !== '');
+    const statusHtml = !hasAnyMark
+        ? '<span style="color:#888;font-size:.82em;">印なし（任意のため問題ありません）</span>'
+        : hasHonmei
+            ? '<span class="status-ok">✔ 印入力済み</span>'
+            : '<span class="status-warn">⚠️ ◎が付いていません（印を送る場合は◎必須）</span>';
+    // ◎○▲⟁△の順でソート
+    const MARK_ORDER = ['honmei','taikou','tanana','renka','osae'];
+    const chipsByMark = [];
+    MARK_ORDER.forEach(mk => {
+        teamsData.forEach(team => {
+            if (selectedMarks[String(team.id)] === mk) {
+                chipsByMark.push(`<div class="mark-chip"><img src="${MARK_FILES[mk]}" alt="${MARK_LABELS[mk]}">${team.tag}</div>`);
+            }
+        });
+    });
+    el.innerHTML = `${statusHtml}<div class="mark-row">${chipsByMark.join('') || ''}</div>`;
 }
 
 function renderBetsCheck() {
@@ -142,9 +153,11 @@ function renderBetsCheck() {
 function checkWarnings() {
     const warnBox = document.getElementById('warn-box');
     const warnings = [];
-    const missing = !Object.values(selectedMarks).includes('honmei') ? ['honmei'] : [];
-    if (missing.length) warnings.push(`本命（◎）が付いていません`);
-    if (!cart.length) warnings.push('買い目がありません');
+    // 印は任意のため未入力は警告しない。ただし印を付けた場合は◎必須
+    const hasAnyMark = Object.values(selectedMarks).some(v => v !== '');
+    const hasHonmei = Object.values(selectedMarks).includes('honmei');
+    if (hasAnyMark && !hasHonmei) warnings.push('印を付ける場合は◎（本命）が必須です');
+    if (!cart.length) warnings.push('買い目がありません（買い目は送信必須です）');
     if (warnings.length) {
         warnBox.style.display = 'block';
         warnBox.innerHTML = warnings.map(w => `⚠️ ${w}`).join('<br>');

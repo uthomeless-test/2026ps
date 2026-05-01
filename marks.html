@@ -109,6 +109,7 @@
 </p>
 
 <p class="required-note">◎（本命）は必ず1チームに付けてください</p>
+<p style="font-size:.85em;color:#555;background:#f5f5f5;border-left:3px solid #aaa;padding:6px 10px;margin-bottom:10px;">💡 印の入力は任意です。買い目の送信のみでも参加できます。印を付ける場合は◎を必ず1チームに設定してください。</p>
 
 <div class="mark-legend">
     <strong>印：</strong>
@@ -333,6 +334,9 @@ const MARK_GROUP = {
 };
 
 function getTeamsByMarkGroup(gk) {
+    if (gk === 'all_marked') {
+        return teamsData.map(t => t.id).sort((a,b) => a-b);
+    }
     return Object.entries(selectedMarks)
         .filter(([,v])=>(MARK_GROUP[gk]||[]).includes(v))
         .map(([id])=>parseInt(id)).sort((a,b)=>a-b);
