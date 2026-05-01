@@ -28,22 +28,29 @@
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
             margin: 12px 0 24px;
+            /* PC: 中央寄せ */
+            display: flex;
+            justify-content: center;
+        }
+        /* スマホでは左寄せ（justify-content:centerだとスクロール時に左端が切れる） */
+        @media (max-width: 767px) {
+            .seimai-outer { justify-content: flex-start; }
         }
 
-        /* テーブル本体：width:max-contentで左寄せ、右端にラベル列 */
         .seimai-table {
             display: flex;
             flex-direction: row-reverse;
             width: max-content;
             border: 2px solid #222;
-            background: #faf6ee;
+            background: #fff;
+            flex-shrink: 0;
         }
 
         .label-col {
             width: var(--label-width);
             display: flex;
             flex-direction: column;
-            background: #f0ece0;
+            background: #f4f4f4;
             border-left: 2px solid #222;
             flex-shrink: 0;
         }
@@ -53,11 +60,11 @@
             color: #333;
             justify-content: center;
             text-align: center;
-            background: #f0ece0;
+            background: #f4f4f4;
         }
         .label-col .row-num { background: #222; }
         .label-col .row-num .cell { color: #fff; }
-        .label-col .row-odds { background: #fff0a0; }
+        .label-col .row-odds { background: #f4f4f4; }
         .label-col .row-odds .cell { color: #333; }
 
         .team-col {
@@ -101,12 +108,12 @@
         .member-btn { background: none; border: none; cursor: pointer; font-size: .78em; color: #003399; padding: 1px 3px; text-decoration: underline; max-width: calc(var(--col-width) - 8px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .member-btn:hover { color: #e91e63; }
 
-        .row-predictor .cell { min-height: 40px; background: #fffef5; }
-        .team-col:nth-child(even) .row-predictor .cell { background: #f7f7ec; }
+        .row-predictor .cell { min-height: 40px; background: #fff; }
+        .team-col:nth-child(even) .row-predictor .cell { background: #f8f8f8; }
 
         .row-mymark { display: none; }
 
-        .row-odds .cell { font-weight: bold; font-size: 1em; background: #fff8e1; min-height: 34px; }
+        .row-odds .cell { font-weight: bold; font-size: 1em; background: #f4f4f4; min-height: 34px; }
         .odds-low  { color: #d00; }
         .odds-dark { color: #111; }
 
@@ -179,6 +186,11 @@ window.addEventListener('DOMContentLoaded', async () => {
         ]);
         teamsData = teams; oddsData = odds; predictionsData = preds;
         renderSeimai();
+        // スマホでは読み込み後に右端（1番）へスクロール
+        if (window.innerWidth < 768) {
+            const outer = document.querySelector('.seimai-outer');
+            outer.scrollLeft = outer.scrollWidth;
+        }
     } catch(e) {
         console.error(e);
         document.querySelector('.seimai-outer').innerHTML = '<p style="padding:20px;color:#d00;">データの読み込みに失敗しました。</p>';
