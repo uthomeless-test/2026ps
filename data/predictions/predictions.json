@@ -1,0 +1,18 @@
+[
+  {
+    "name": "仮1",
+    "marks": { "1": "honmei", "2": "taikou", "3": "osae", "4": null, "5": "tanana", "6": null, "7": null, "8": "renka" }
+  },
+  {
+    "name": "仮2",
+    "marks": { "1": "taikou", "2": "honmei", "3": "tanana", "4": null, "5": null, "6": null, "7": "osae", "8": "renka" }
+  },
+  {
+    "name": "仮3",
+    "marks": { "1": "tanana", "2": "taikou", "3": null, "4": "osae", "5": "honmei", "6": null, "7": null, "8": "renka" }
+  },
+  {
+    "name": "仮4",
+    "marks": { "1": "renka", "2": "honmei", "3": "osae", "4": null, "5": "taikou", "6": null, "7": "tanana", "8": "osae" }
+  }
+]
