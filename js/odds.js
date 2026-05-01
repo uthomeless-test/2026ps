@@ -23,6 +23,7 @@ window.addEventListener('DOMContentLoaded', async () => {
         const data = await loadAllData();
         teams    = data.teams;
         oddsData = data.odds;
+        loadCart();
         renderTeamHeader();
         initMsHeader();
         renderCart();
@@ -290,6 +291,7 @@ function setMarksheet() {
         formationStr = `軸[${[...msRows[0]].join(',')}] - 相手[${[...msRows[1]].join(',')}]`;
     }
     cart.push({ id: genId(), displayType: `${displayType}(${modeNames[voteMode]})`, type: currentType, formation: formationStr, combs, amountPerBet: 100 });
+    saveCart();
     renderCart();
     document.getElementById('bet-management').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
@@ -382,6 +384,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!combKey) return;
         }
         cart.push({ id: genId(), displayType, type: betType, formation: combKey, combs: [combKey], amountPerBet: 100 });
+        saveCart();
         renderCart();
         document.getElementById('bet-management').scrollIntoView({ behavior: 'smooth', block: 'start' });
         row.style.transition = 'none';
@@ -389,6 +392,26 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => { row.style.transition = 'background 0.4s'; row.style.backgroundColor = ''; }, 150);
     });
 });
+
+const CART_STORAGE_KEY = 'cart_ps2627';
+
+function saveCart() {
+    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
+}
+
+function loadCart() {
+    try {
+        const saved = localStorage.getItem(CART_STORAGE_KEY);
+        if (saved) {
+            cart = JSON.parse(saved);
+            // idカウンターを保存済みの最大idより大きくする
+            const maxId = cart.reduce((m, i) => Math.max(m, i.id || 0), 0);
+            _idCounter = maxId + 1;
+        }
+    } catch(e) {
+        cart = [];
+    }
+}
 
 // ── カート ───────────────────────────────────────────
 function renderCart() {
@@ -426,12 +449,20 @@ function renderCart() {
     updateTotal();
 }
 
-function removeFromCart(id) { cart = cart.filter(i => i.id !== id); renderCart(); }
+function removeFromCart(id) { cart = cart.filter(i => i.id !== id); saveCart(); renderCart(); }
+
+function clearCart() {
+    if (!confirm('買い目をすべて削除します。よろしいですか？')) return;
+    cart = [];
+    saveCart();
+    renderCart();
+}
 
 function expandBet(id) {
     const item = cart.find(i => i.id === id); if (!item) return;
     item.combs.forEach(ck => cart.push({ id: genId(), displayType: item.displayType, type: item.type, formation: ck, combs: [ck], amountPerBet: item.amountPerBet }));
     cart = cart.filter(i => i.id !== id);
+    saveCart();
     renderCart();
 }
 
@@ -530,12 +561,11 @@ function npConfirm() {
                 retEl.textContent = ret !== null ? `想定払戻: ${ret.toLocaleString()} pt` : '';
             }
             updateTotal();
+            saveCart();
         }
     }
     _closeNumpadCleanup();
-}
-
-function _doExpandWithBudget(id, budget) {
+}function _doExpandWithBudget(id, budget) {
     const item = cart.find(i => i.id === id);
     if (!item || item.combs.length === 0) return;
 
@@ -579,6 +609,7 @@ function _doExpandWithBudget(id, budget) {
         formation: c.ck, combs: [c.ck], amountPerBet: amounts[idx]
     }));
     cart.splice(insertIdx, 1, ...newItems);
+    saveCart();
     renderCart();
 }
 
