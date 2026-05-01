@@ -142,7 +142,7 @@ function buildMsRows() {
         axis1: currentType === 'exacta'
             ? '軸は1チームのみ（赤）。軸が1着・2着どちらにも絡む全パターンを購入します'
             : '軸は1チームのみ（赤）。軸が1・2・3着どこにでも絡む全順列を購入します',
-        axis2: '軸は最大2チームまで（赤）。相手は複数選択可能です（3連単のみ）'
+        axis2: '軸2チーム（赤）を固定し、相手を1チームずつ加えた3チームの全順列を購入します'
     };
     document.getElementById('ms-hint').innerText = hints[voteMode] || '';
 }
