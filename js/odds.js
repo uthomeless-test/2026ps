@@ -549,10 +549,23 @@ function renderCart() {
 function removeFromCart(id) { cart = cart.filter(i => i.id !== id); saveCart(); renderCart(); }
 
 function clearCart() {
-    if (!confirm('買い目をすべて削除します。よろしいですか？')) return;
-    cart = [];
-    saveCart();
-    renderCart();
+    // スマホでconfirm()がブロックされる場合があるためカスタムダイアログを使用
+    const overlay = document.createElement('div');
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;display:flex;align-items:center;justify-content:center;';
+    const box = document.createElement('div');
+    box.style.cssText = 'background:#fff;border-radius:8px;padding:24px 20px;max-width:300px;width:90%;text-align:center;box-shadow:0 4px 20px rgba(0,0,0,.3);';
+    box.innerHTML = `<p style="margin:0 0 18px;font-size:.95em;line-height:1.6;">買い目をすべて削除します。<br>よろしいですか？</p>
+        <div style="display:flex;gap:10px;justify-content:center;">
+            <button id="_cc_ok" style="padding:8px 24px;background:#d00;color:#fff;border:none;border-radius:4px;font-weight:bold;cursor:pointer;font-size:.9em;">削除</button>
+            <button id="_cc_cancel" style="padding:8px 24px;background:#f0f0f0;color:#333;border:none;border-radius:4px;cursor:pointer;font-size:.9em;">キャンセル</button>
+        </div>`;
+    overlay.appendChild(box);
+    document.body.appendChild(overlay);
+    document.getElementById('_cc_ok').onclick = () => {
+        cart = []; saveCart(); renderCart();
+        document.body.removeChild(overlay);
+    };
+    document.getElementById('_cc_cancel').onclick = () => document.body.removeChild(overlay);
 }
 
 function expandBet(id) {
