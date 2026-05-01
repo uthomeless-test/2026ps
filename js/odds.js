@@ -24,10 +24,15 @@ window.addEventListener('DOMContentLoaded', async () => {
         teams    = data.teams;
         oddsData = data.odds;
         loadCart();
+        loadMsState();
         renderTeamHeader();
         initMsHeader();
         renderCart();
-        render();
+        // 前回のタブを復元
+        const savedTab = localStorage.getItem(TAB_STORAGE_KEY) || 'win-place';
+        const tabEl = document.querySelector(`.tab-menu li[data-type="${savedTab}"]`);
+        if (tabEl) switchTab(savedTab, tabEl);
+        else render();
     } catch (e) {
         console.error('データ読み込み失敗:', e);
         document.body.insertAdjacentHTML('afterbegin',
@@ -46,6 +51,46 @@ function renderTeamHeader() {
         t += `<td><img src="${tm.logo}" class="team-logo" alt="${tm.tag}"><br>${tm.tag}</td>`;
     });
     table.innerHTML = h + '</tr>' + t + '</tr>';
+}
+
+const TAB_STORAGE_KEY  = 'tab_ps2627';
+const MS_STORAGE_KEY   = 'ms_ps2627';
+
+// タブごとのマークシート状態を保存
+const msState = {};  // { [type]: { voteMode, rows: [[...],[...],[...]] } }
+
+function saveMsState() {
+    const state = {};
+    Object.keys(msState).forEach(type => {
+        state[type] = {
+            voteMode: msState[type].voteMode,
+            rows: msState[type].rows.map(s => [...s])
+        };
+    });
+    localStorage.setItem(MS_STORAGE_KEY, JSON.stringify(state));
+    localStorage.setItem(TAB_STORAGE_KEY, currentType);
+}
+
+function loadMsState() {
+    try {
+        const saved = localStorage.getItem(MS_STORAGE_KEY);
+        if (saved) {
+            const state = JSON.parse(saved);
+            Object.keys(state).forEach(type => {
+                msState[type] = {
+                    voteMode: state[type].voteMode,
+                    rows: state[type].rows.map(arr => new Set(arr))
+                };
+            });
+        }
+    } catch(e) {}
+}
+
+function getCurrentMsState() {
+    if (!msState[currentType]) {
+        msState[currentType] = { voteMode: 'formation', rows: [new Set(), new Set(), new Set()] };
+    }
+    return msState[currentType];
 }
 
 // ── タブ切り替え ─────────────────────────────────────
@@ -67,23 +112,28 @@ function switchTab(type, el) {
         modeBar.classList.remove('hidden');
         msArea.classList.remove('hidden');
 
+        // タブごとの状態を復元
+        const st = getCurrentMsState();
+        voteMode = st.voteMode;
+        msRows   = st.rows;
+
         if (type === 'exacta') {
             axis1Btn.style.display = '';
             axis2Btn.style.display = 'none';
-            if (voteMode === 'axis2') { voteMode = 'formation'; resetVoteModeButtons('formation'); }
+            if (voteMode === 'axis2') { voteMode = 'formation'; st.voteMode = 'formation'; resetVoteModeButtons('formation'); }
         } else if (type === 'trifecta') {
             axis1Btn.style.display = '';
             axis2Btn.style.display = '';
         } else {
             axis1Btn.style.display = 'none';
             axis2Btn.style.display = 'none';
-            if (voteMode === 'axis1' || voteMode === 'axis2') { voteMode = 'formation'; resetVoteModeButtons('formation'); }
+            if (voteMode === 'axis1' || voteMode === 'axis2') { voteMode = 'formation'; st.voteMode = 'formation'; resetVoteModeButtons('formation'); }
         }
-
-        msRows = [ new Set(), new Set(), new Set() ];
+        resetVoteModeButtons(voteMode);
         buildMsRows();
         updateMsCombCount();
     }
+    saveMsState();
     render();
 }
 
@@ -98,8 +148,12 @@ function switchVoteMode(mode, el) {
     document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
     el.classList.add('active');
     msRows = [ new Set(), new Set(), new Set() ];
+    const st = getCurrentMsState();
+    st.voteMode = mode;
+    st.rows     = msRows;
     buildMsRows();
     updateMsCombCount();
+    saveMsState();
 }
 
 // ── マークシート ─────────────────────────────────────
@@ -164,15 +218,19 @@ function toggleMs(ri, num) {
         if (voteMode === 'axis2' && ri === 0 && msRows[0].size >= 2) return;
         msRows[ri].add(num);
     }
+    getCurrentMsState().rows = msRows;
     buildMsRows();
     updateMsCombCount();
+    saveMsState();
 }
 
 function bulkMs(ri, val) {
     if (val) { teams.forEach((_, i) => msRows[ri].add(i + 1)); }
     else      { msRows[ri].clear(); }
+    getCurrentMsState().rows = msRows;
     buildMsRows();
     updateMsCombCount();
+    saveMsState();
 }
 
 function updateMsCombCount() {
