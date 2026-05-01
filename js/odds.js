@@ -93,36 +93,16 @@ function renderTeamHeader() {
 }
 
 const TAB_STORAGE_KEY  = 'tab_ps2627';
-const MS_STORAGE_KEY   = 'ms_ps2627';
 
-// タブごとのマークシート状態を保存
-const msState = {};  // { [type]: { voteMode, rows: [[...],[...],[...]] } }
+// タブごとのマークシート状態（ページ内のみ、保存なし）
+const msState = {};
 
 function saveMsState() {
-    const state = {};
-    Object.keys(msState).forEach(type => {
-        state[type] = {
-            voteMode: msState[type].voteMode,
-            rows: msState[type].rows.map(s => [...s])
-        };
-    });
-    localStorage.setItem(MS_STORAGE_KEY, JSON.stringify(state));
-    localStorage.setItem(TAB_STORAGE_KEY, currentType);
+    // 保持不要 - タブ・ページ移動でリセット
 }
 
 function loadMsState() {
-    try {
-        const saved = localStorage.getItem(MS_STORAGE_KEY);
-        if (saved) {
-            const state = JSON.parse(saved);
-            Object.keys(state).forEach(type => {
-                msState[type] = {
-                    voteMode: state[type].voteMode,
-                    rows: state[type].rows.map(arr => new Set(arr))
-                };
-            });
-        }
-    } catch(e) {}
+    // 保持不要 - 常に空で開始
 }
 
 function getCurrentMsState() {
@@ -132,12 +112,23 @@ function getCurrentMsState() {
     return msState[currentType];
 }
 
+function resetCurrentMs() {
+    msState[currentType] = { voteMode: 'formation', rows: [new Set(), new Set(), new Set()] };
+    msRows = msState[currentType].rows;
+    voteMode = 'formation';
+}
+
 // ── タブ切り替え ─────────────────────────────────────
 function switchTab(type, el) {
     document.querySelectorAll('.tab-menu li').forEach(li => li.classList.remove('active'));
     el.classList.add('active');
     currentType = type;
     filterMode  = false;
+
+    // タブ切り替えでマークシートをリセット
+    msState[type] = { voteMode: 'formation', rows: [new Set(), new Set(), new Set()] };
+    voteMode = 'formation';
+    msRows   = msState[type].rows;
 
     const modeBar  = document.getElementById('vote-mode-bar');
     const msArea   = document.getElementById('marksheet-area');
@@ -151,24 +142,17 @@ function switchTab(type, el) {
         modeBar.classList.remove('hidden');
         msArea.classList.remove('hidden');
 
-        // タブごとの状態を復元
-        const st = getCurrentMsState();
-        voteMode = st.voteMode;
-        msRows   = st.rows;
-
         if (type === 'exacta') {
             axis1Btn.style.display = '';
             axis2Btn.style.display = 'none';
-            if (voteMode === 'axis2') { voteMode = 'formation'; st.voteMode = 'formation'; resetVoteModeButtons('formation'); }
         } else if (type === 'trifecta') {
             axis1Btn.style.display = '';
             axis2Btn.style.display = '';
         } else {
             axis1Btn.style.display = 'none';
             axis2Btn.style.display = 'none';
-            if (voteMode === 'axis1' || voteMode === 'axis2') { voteMode = 'formation'; st.voteMode = 'formation'; resetVoteModeButtons('formation'); }
         }
-        resetVoteModeButtons(voteMode);
+        resetVoteModeButtons('formation');
         buildMsRows();
         updateMsCombCount();
     }
