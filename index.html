@@ -108,7 +108,11 @@
         .member-btn { background: none; border: none; cursor: pointer; font-size: .78em; color: #003399; padding: 1px 3px; text-decoration: underline; max-width: calc(var(--col-width) - 8px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .member-btn:hover { color: #e91e63; }
 
-        .row-predictor .cell { min-height: 40px; background: #fff; }
+        .row-predictor .cell {
+            height: calc(var(--mark-size) + 16px);
+            min-height: calc(var(--mark-size) + 16px);
+            background: #fff;
+        }
         .team-col:nth-child(even) .row-predictor .cell { background: #f8f8f8; }
 
         .row-mymark { display: none; }
