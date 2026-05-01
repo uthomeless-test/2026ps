@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80">
+  <rect width="80" height="80" rx="8" fill="#002060"/>
+  <path d="M16 20 L16 60 Q16 64 20 64 L36 64 Q56 64 60 44 Q64 24 44 20 Z" fill="none" stroke="#4fc3f7" stroke-width="2.5"/>
+  <path d="M24 30 L24 54 L36 54 Q48 54 50 44 Q52 30 40 28 Z" fill="#4fc3f7"/>
+  <text x="58" y="68" text-anchor="middle" font-family="Arial Black,sans-serif" font-size="9" font-weight="900" fill="#4fc3f7">DFM</text>
+</svg>

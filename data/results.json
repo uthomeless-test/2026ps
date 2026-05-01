@@ -1,0 +1,42 @@
+[
+  {
+    "team_id": 1,
+    "recent": [],
+    "overall": { "win": 0, "lose": 0 }
+  },
+  {
+    "team_id": 2,
+    "recent": [],
+    "overall": { "win": 0, "lose": 0 }
+  },
+  {
+    "team_id": 3,
+    "recent": [],
+    "overall": { "win": 0, "lose": 0 }
+  },
+  {
+    "team_id": 4,
+    "recent": [],
+    "overall": { "win": 0, "lose": 0 }
+  },
+  {
+    "team_id": 5,
+    "recent": [],
+    "overall": { "win": 0, "lose": 0 }
+  },
+  {
+    "team_id": 6,
+    "recent": [],
+    "overall": { "win": 0, "lose": 0 }
+  },
+  {
+    "team_id": 7,
+    "recent": [],
+    "overall": { "win": 0, "lose": 0 }
+  },
+  {
+    "team_id": 8,
+    "recent": [],
+    "overall": { "win": 0, "lose": 0 }
+  }
+]

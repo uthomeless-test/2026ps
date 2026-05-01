@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80">
+  <rect width="80" height="80" rx="8" fill="#00205b"/>
+  <path d="M40 12 L44 26 L58 26 L47 35 L51 49 L40 40 L29 49 L33 35 L22 26 L36 26 Z" fill="#f5a623"/>
+  <text x="40" y="66" text-anchor="middle" font-family="Arial Black,sans-serif" font-size="10" font-weight="900" fill="#fff">LVH</text>
+</svg>

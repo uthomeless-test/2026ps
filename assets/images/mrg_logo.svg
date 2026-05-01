@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80">
+  <rect width="80" height="80" rx="8" fill="#0a2000"/>
+  <rect x="12" y="12" width="56" height="56" rx="4" fill="none" stroke="#76ff03" stroke-width="2"/>
+  <path d="M20 55 L20 30 L40 50 L60 30 L60 55" fill="none" stroke="#76ff03" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="40" y="72" text-anchor="middle" font-family="Arial Black,sans-serif" font-size="9" font-weight="900" fill="#76ff03">MRG</text>
+</svg>

@@ -1,0 +1,368 @@
+:root {
+    --jra-blue: #003399;
+    --jra-green: #007d43;
+    --border-color: #ccc;
+    --accent-red: #d00;
+}
+
+body {
+    font-family: "Helvetica Neue", Arial, sans-serif;
+    font-size: 14px;
+    margin: 10px;
+    color: #333;
+    background: #fff;
+}
+
+/* ── 共通 ── */
+.section-title {
+    border-left: 5px solid var(--jra-blue);
+    padding-left: 10px;
+    font-size: 1.1em;
+    margin: 20px 0 10px;
+    font-weight: bold;
+}
+.hidden { display: none !important; }
+.result-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #444;
+    color: #fff;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 4px;
+}
+.odd_view {
+    background: #ffeb3b;
+    border: none;
+    padding: 8px 20px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 3px;
+    color: #000;
+}
+.odd_view:hover { background: #fdd835; }
+
+/* ── チームヘッダー ── */
+.team-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    table-layout: fixed;
+}
+.team-table th,
+.team-table td {
+    border: 1px solid var(--border-color);
+    text-align: center;
+    padding: 8px 2px;
+}
+.team-table th {
+    background: var(--jra-blue);
+    color: #fff;
+    font-size: .8em;
+}
+.team-table td {
+    font-weight: bold;
+    font-size: .9em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.team-logo {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+    vertical-align: middle;
+    margin-bottom: 3px;
+}
+
+/* ── タブ ── */
+.tab-menu {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-bottom: 2px solid var(--jra-blue);
+    flex-wrap: wrap;
+}
+.tab-menu li {
+    padding: 10px 15px;
+    cursor: pointer;
+    background: #eee;
+    margin-right: 2px;
+    border: 1px solid var(--border-color);
+    border-bottom: none;
+    font-weight: bold;
+}
+.tab-menu li.active {
+    background: var(--jra-blue);
+    color: #fff;
+    border-color: var(--jra-blue);
+}
+
+/* ── 投票モード ── */
+.vote-mode-bar {
+    display: flex;
+    gap: 6px;
+    margin: 8px 0;
+    flex-wrap: wrap;
+}
+.mode-btn {
+    padding: 6px 14px;
+    border: 2px solid var(--jra-blue);
+    background: #fff;
+    color: var(--jra-blue);
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: .85em;
+}
+.mode-btn.active {
+    background: var(--jra-blue);
+    color: #fff;
+}
+
+/* ── マークシート ── */
+.marksheet-area {
+    background: #f2f2f2;
+    padding: 10px;
+    border: 1px solid var(--border-color);
+    margin-top: -1px;
+}
+.ms-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    margin-bottom: 6px;
+}
+.ms-table th,
+.ms-table td {
+    border: 1px solid var(--border-color);
+    padding: 4px;
+    text-align: center;
+    font-size: .85em;
+}
+.ms-table th { background: #e9e9e9; }
+.ms-row-label {
+    font-weight: bold;
+    background: #f8f9fa;
+    white-space: nowrap;
+}
+.ms-cell {
+    cursor: pointer;
+    user-select: none;
+    transition: background .12s;
+}
+.ms-cell:hover { background: #dde8ff; }
+.ms-cell.marked { background: var(--jra-blue); color: #fff; font-weight: bold; }
+.ms-cell.axis1  { background: #e91e63; color: #fff; font-weight: bold; }
+.ms-cell.axis2  { background: #ff9800; color: #fff; font-weight: bold; }
+.all_button {
+    width: 28px;
+    padding: 2px;
+    cursor: pointer;
+    font-size: .8em;
+}
+
+/* ── ソートボタン ── */
+.sort-controls { margin: 15px 0 5px; }
+.sort-btn {
+    padding: 5px 15px;
+    cursor: pointer;
+    border: 1px solid var(--jra-blue);
+    background: #fff;
+    color: var(--jra-blue);
+    border-radius: 4px;
+}
+.sort-btn.active { background: var(--jra-blue); color: #fff; }
+
+/* ── オッズ一覧 ── */
+.list-wrapper {
+    max-height: 500px;
+    overflow-y: auto;
+    border: 1px solid var(--border-color);
+    margin-top: 10px;
+}
+table.list-table { width: 100%; border-collapse: collapse; }
+.list-table th {
+    position: sticky;
+    top: 0;
+    background: #eee;
+    border: 1px solid var(--border-color);
+    padding: 8px;
+}
+.list-table td {
+    border: 1px solid var(--border-color);
+    padding: 8px;
+    text-align: center;
+}
+.odds-val { font-weight: bold; }
+.odds-low  { color: #d00; }
+.odds-high { color: #0066cc; }
+.odds_row { cursor: pointer; transition: background .15s; }
+.odds_row:hover  { background: #fff9c4 !important; }
+.odds_row:active { background: #ffe082 !important; }
+
+/* ── カート ── */
+#bet-management {
+    margin-top: 30px;
+    border: 2px solid #333;
+    padding: 15px;
+    border-radius: 8px;
+    background: #fdfdfd;
+}
+#cart-table { width: 100%; border-collapse: collapse; }
+#cart-table th {
+    padding: 5px;
+    border-bottom: 1px solid #ccc;
+    background: #eee;
+    font-size: .85em;
+}
+#cart-table td {
+    padding: 6px 8px;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: center;
+    vertical-align: middle;
+}
+.pt-display {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    cursor: pointer;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: 3px 6px;
+    background: #fff;
+    font-size: .9em;
+    white-space: nowrap;
+}
+.pt-display:hover { border-color: var(--jra-blue); background: #eef; }
+.pt-n { font-weight: bold; color: var(--jra-blue); min-width: 1.4em; text-align: right; }
+.pt-fixed { color: #666; }
+
+/* ── カートボタン ── */
+.btn-expand {
+    font-size: .75em;
+    cursor: pointer;
+    padding: 3px 7px;
+    border: 1px solid #aaa;
+    border-radius: 3px;
+    background: #f5f5f5;
+}
+.btn-expand:hover { background: #e0e8ff; }
+.btn-expand-budget {
+    font-size: .75em;
+    cursor: pointer;
+    padding: 3px 7px;
+    border: 1px solid #007d43;
+    border-radius: 3px;
+    background: #e8f5e9;
+    color: #007d43;
+    font-weight: bold;
+}
+.btn-expand-budget:hover { background: #c8e6c9; }
+.btn-delete {
+    font-size: .75em;
+    cursor: pointer;
+    padding: 3px 7px;
+    border: 1px solid #d00;
+    border-radius: 3px;
+    background: #fff0f0;
+    color: #d00;
+}
+.btn-delete:hover { background: #ffd0d0; }
+
+/* ── テンキー ── */
+#numpad-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.45);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#numpad-box {
+    background: #fff;
+    border-radius: 10px;
+    padding: 18px;
+    width: 220px;
+    box-shadow: 0 6px 30px rgba(0,0,0,.35);
+}
+#numpad-preview {
+    font-size: 1.4em;
+    font-weight: bold;
+    text-align: right;
+    color: var(--jra-blue);
+    margin-bottom: 10px;
+    border-bottom: 2px solid var(--jra-blue);
+    padding-bottom: 6px;
+}
+.np-grid {
+    display: grid;
+    grid-template-columns: repeat(3,1fr);
+    gap: 6px;
+}
+.np-btn {
+    padding: 12px 0;
+    font-size: 1.1em;
+    font-weight: bold;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    cursor: pointer;
+    background: #f8f8f8;
+}
+.np-btn:hover   { background: #e0e8ff; }
+.np-btn.confirm { background: var(--jra-blue); color: #fff; grid-column: span 2; }
+.np-btn.cancel  { background: #eee; }
+#numpad-label {
+    font-size: .8em;
+    color: #888;
+    margin-bottom: 6px;
+    text-align: center;
+}
+
+/* ── フォームエクスポート ── */
+.btn-set-formation {
+    background: #e91e63;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-left: 10px;
+}
+.btn-set-formation:hover { background: #d81b60; }
+#form-export-area {
+    position: fixed;
+    top: 15%;
+    left: 5%;
+    width: 90%;
+    height: 70%;
+    background: #fff;
+    border: 3px solid #333;
+    z-index: 1000;
+    padding: 20px;
+    box-shadow: 0 0 20px rgba(0,0,0,.5);
+}
+
+/* ── ページナビ ── */
+.page-nav {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+.page-nav a {
+    padding: 8px 18px;
+    border: 2px solid var(--jra-blue);
+    border-radius: 4px;
+    color: var(--jra-blue);
+    text-decoration: none;
+    font-weight: bold;
+    font-size: .9em;
+}
+.page-nav a.active,
+.page-nav a:hover {
+    background: var(--jra-blue);
+    color: #fff;
+}

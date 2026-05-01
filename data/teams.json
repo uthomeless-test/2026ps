@@ -1,0 +1,93 @@
+[
+  {
+    "id": 1,
+    "name": "Crazy Raccoon",
+    "tag": "CR",
+    "logo": "assets/images/cr_logo.svg",
+    "members": [
+      { "name": "Atom",   "x": "https://x.com/Atomu_sv",     "youtube": "https://www.youtube.com/channel/UC8yvw5d2_e--XXt8uw0aMTg" },
+      { "name": "ふえた", "x": "https://x.com/saboten_sv",   "youtube": "https://www.youtube.com/channel/UCNnIhUQILBeaABXyzVQMq_w" },
+      { "name": "Winter", "x": "https://x.com/msfsv",        "youtube": "https://www.youtube.com/@Winter-r5o" },
+      { "name": "空白",   "x": "https://x.com/Kuhaku_sv",    "youtube": "https://www.youtube.com/@Kuhaku-q7c" }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "ZETA DIVISION",
+    "tag": "ZETA",
+    "logo": "assets/images/zeta_logo.svg",
+    "members": [
+      { "name": "CQCQ",  "x": "https://x.com/cqcq_sv",        "youtube": "https://www.youtube.com/@cqcqshadowverse" },
+      { "name": "ヘイム", "x": "https://x.com/heimu_v0122v",   "youtube": "https://www.youtube.com/@heim_sv" },
+      { "name": "TBT",   "x": "https://x.com/tabe_tter",      "youtube": "https://www.youtube.com/@tabe_tter" }
+    ]
+  },
+  {
+    "id": 3,
+    "name": "DetonatioN FocusMe",
+    "tag": "DFM",
+    "logo": "assets/images/dfm_logo.svg",
+    "members": [
+      { "name": "ミル",   "x": "", "youtube": "" },
+      { "name": "ユーリ", "x": "", "youtube": "" },
+      { "name": "かなで", "x": "", "youtube": "" }
+    ]
+  },
+  {
+    "id": 4,
+    "name": "VARREL",
+    "tag": "VRL",
+    "logo": "assets/images/varrel_logo.svg",
+    "members": [
+      { "name": "Mishadow51", "x": "", "youtube": "" },
+      { "name": "Terarina",   "x": "", "youtube": "" },
+      { "name": "monakawan",  "x": "", "youtube": "" }
+    ]
+  },
+  {
+    "id": 5,
+    "name": "MURASH GAMING",
+    "tag": "MRG",
+    "logo": "assets/images/mrg_logo.svg",
+    "members": [
+      { "name": "マイト",   "x": "", "youtube": "" },
+      { "name": "glory",    "x": "", "youtube": "" },
+      { "name": "Toby",     "x": "", "youtube": "" },
+      { "name": "Spicies",  "x": "", "youtube": "" }
+    ]
+  },
+  {
+    "id": 6,
+    "name": "REJECT",
+    "tag": "RJC",
+    "logo": "assets/images/reject_logo.svg",
+    "members": [
+      { "name": "あぐのむ", "x": "", "youtube": "" },
+      { "name": "たばた",   "x": "", "youtube": "" },
+      { "name": "ぱらちゃん","x": "", "youtube": "" },
+      { "name": "拓海",     "x": "", "youtube": "" }
+    ]
+  },
+  {
+    "id": 7,
+    "name": "RIDDLE",
+    "tag": "RDL",
+    "logo": "assets/images/riddle_logo.svg",
+    "members": [
+      { "name": "折り紙",   "x": "", "youtube": "" },
+      { "name": "メンバー2","x": "", "youtube": "" },
+      { "name": "メンバー3","x": "", "youtube": "" }
+    ]
+  },
+  {
+    "id": 8,
+    "name": "レバンガ北海道",
+    "tag": "LVH",
+    "logo": "assets/images/levanga_logo.svg",
+    "members": [
+      { "name": "Era53",   "x": "", "youtube": "" },
+      { "name": "rikka",   "x": "", "youtube": "" },
+      { "name": "だーよね","x": "", "youtube": "" }
+    ]
+  }
+]
