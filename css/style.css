@@ -388,7 +388,14 @@ table.odds-list tr.odds_row td[data-clickable]:hover {
 .page-nav {
     display: flex;
     gap: 8px;
-    margin-bottom: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: #fff;
+    padding: 8px 16px;
+    margin: 0 -10px 16px;
+    border-bottom: 2px solid var(--jra-blue);
+    box-shadow: 0 2px 6px rgba(0,0,0,.08);
 }
 .page-nav a {
     padding: 8px 18px;
