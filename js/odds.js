@@ -559,7 +559,7 @@ function _doExpandWithBudget(id, budget) {
 }
 
 // ── フォーム出力 ─────────────────────────────────────
-const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSd3lkH75uSufuwNEllHmrXZQmxXnq-w1T2SBLne6kO7JiUJvA/viewform';
+const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSd3lkH75uSufuwNEllHmrXZQmxXnq-w1T2SBLne6kO7JiUJvA/viewform?usp=header';
 
 function prepareGoogleForm() {
     if (cart.length === 0) return alert('買い目がありません');
