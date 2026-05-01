@@ -41,6 +41,7 @@
 </div>
 
 <div id="marksheet-area" class="marksheet-area hidden">
+    <div class="ms-table-wrap">
     <table class="ms-table" id="ms-table">
         <thead>
             <tr id="ms-head-nums"><th>番号</th></tr>
@@ -48,6 +49,7 @@
         </thead>
         <tbody id="ms-body"></tbody>
     </table>
+    </div>
     <div class="result-bar">
         <div>組合せ: <span id="ms-comb-count" style="color:#ffeb3b;font-size:1.2em;font-weight:bold;">0</span> 通り</div>
         <div>
@@ -63,10 +65,12 @@
 <div id="bet-management">
     <div class="section-title">購入予定リスト (予算: 20,000pt)</div>
     <div style="min-height:80px;border:1px solid #ccc;background:#fff;margin-bottom:10px;">
+        <div class="cart-scroll-wrap">
         <table id="cart-table">
             <thead><tr><th>券種</th><th>買い目</th><th>点数</th><th>単価</th><th>操作</th></tr></thead>
             <tbody id="cart-body"></tbody>
         </table>
+        </div>
     </div>
     <div class="result-bar" style="background:#222;">
         <div>合計金額: <span id="total-bet-amount" style="color:#ffeb3b;font-size:1.4em;">0</span> pt</div>

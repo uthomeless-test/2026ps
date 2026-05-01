@@ -302,12 +302,18 @@ function setSortMode(mode) {
 }
 
 // ── オッズ描画 ───────────────────────────────────────
-function getOddsClass(valStr) {
+function getOddsClass(valStr, type) {
     if (!valStr || valStr === '---') return '';
     const minVal = parseFloat(valStr.split('-')[0]);
     if (isNaN(minVal)) return '';
-    if (minVal <= 10)   return 'odds-low';
-    if (minVal >= 1000) return 'odds-high';
+    const isMulti = ['quinella', 'exacta', 'trio', 'trifecta'].includes(type);
+    if (isMulti) {
+        if (minVal <= 100)  return 'odds-low';
+        if (minVal >= 1000) return 'odds-high';
+    } else {
+        if (minVal <= 10)  return 'odds-low';
+        if (minVal >= 100) return 'odds-high';
+    }
     return '';
 }
 
@@ -331,7 +337,7 @@ function render() {
     }
     let html = `<div class="list-wrapper"><table class="list-table"><thead><tr><th>組合せ</th><th>オッズ</th></tr></thead><tbody>`;
     dataArr.forEach(d => {
-        html += `<tr class="odds_row" data-comb="${d.key}"><td>${d.key}</td><td class="odds-val ${getOddsClass(d.val)}">${d.val}</td></tr>`;
+        html += `<tr class="odds_row" data-comb="${d.key}"><td>${d.key}</td><td class="odds-val ${getOddsClass(d.val, currentType)}">${d.val}</td></tr>`;
     });
     container.innerHTML = html + `</tbody></table></div>`;
 }
@@ -348,8 +354,8 @@ function renderWinPlace() {
     list.forEach(item => {
         html += `<tr class="odds_row" data-no="${item.no}">
             <td>${item.no}</td><td>${item.tag}</td>
-            <td class="odds-val ${getOddsClass(item.win)}"  data-bet-type="win">${item.win  || '---'}</td>
-            <td class="odds-val ${getOddsClass(item.place)}" data-bet-type="place">${item.place || '---'}</td>
+            <td class="odds-val ${getOddsClass(item.win, 'win-place')}"  data-bet-type="win">${item.win  || '---'}</td>
+            <td class="odds-val ${getOddsClass(item.place, 'win-place')}" data-bet-type="place">${item.place || '---'}</td>
         </tr>`;
     });
     container.innerHTML = html + `</tbody></table>`;
