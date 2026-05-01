@@ -335,9 +335,9 @@ function render() {
             return ak.localeCompare(bk);
         });
     }
-    let html = `<div class="list-wrapper"><table class="list-table"><thead><tr><th>組合せ</th><th>オッズ</th></tr></thead><tbody>`;
+    let html = `<div class="list-wrapper"><table class="list-table odds-list"><thead><tr><th class="col-comb">組合せ</th><th class="col-odds">オッズ</th></tr></thead><tbody>`;
     dataArr.forEach(d => {
-        html += `<tr class="odds_row" data-comb="${d.key}"><td>${d.key}</td><td class="odds-val ${getOddsClass(d.val, currentType)}">${d.val}</td></tr>`;
+        html += `<tr class="odds_row" data-comb="${d.key}"><td class="col-comb">${d.key}</td><td class="col-odds odds-val ${getOddsClass(d.val, currentType)}" data-clickable="1">${d.val}</td></tr>`;
     });
     container.innerHTML = html + `</tbody></table></div>`;
 }
@@ -373,6 +373,9 @@ document.addEventListener('DOMContentLoaded', () => {
             combKey     = row.dataset.no;
             displayType = betType === 'win' ? '単勝' : '複勝';
         } else {
+            // オッズセル（右側）のクリックのみ反応
+            const cell = e.target.closest('td[data-clickable]');
+            if (!cell) return;
             combKey     = row.dataset.comb;
             betType     = currentType;
             displayType = document.querySelector('.tab-menu li.active').innerText;

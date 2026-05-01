@@ -361,7 +361,30 @@ table.list-table { width: 100%; border-collapse: collapse; }
     box-shadow: 0 0 20px rgba(0,0,0,.5);
 }
 
-/* ── ページナビ ── */
+/* ── オッズ一覧（2連複〜3連単）共通セル幅 ── */
+table.odds-list {
+    table-layout: fixed;
+    width: 100%;
+}
+table.odds-list .col-comb {
+    width: 60%;
+    text-align: center;
+    font-family: monospace;
+    font-size: .9em;
+}
+table.odds-list .col-odds {
+    width: 40%;
+    text-align: center;
+    font-size: .9em;
+    cursor: pointer;
+}
+/* 行ホバー時にオッズセルだけ濃くする（単複と同じ色） */
+table.odds-list tr.odds_row:hover .col-odds {
+    background: #fff9c4 !important;
+}
+table.odds-list tr.odds_row td[data-clickable]:hover {
+    background: #ffe082 !important;
+}
 .page-nav {
     display: flex;
     gap: 8px;
