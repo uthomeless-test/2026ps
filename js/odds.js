@@ -87,7 +87,6 @@ function renderTeamHeader() {
     table.innerHTML = h + '</tr>' + t + '</tr>';
 }
 
-const TAB_STORAGE_KEY  = 'tab_ps2627';
 
 // タブごとのマークシート状態（ページ内のみ、保存なし）
 const msState = {};
@@ -469,7 +468,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-const CART_STORAGE_KEY = 'cart_ps2627';
 
 function saveCart() {
     localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cart));
@@ -703,7 +701,6 @@ function npConfirm() {
 }
 
 // ── フォーム出力 ─────────────────────────────────────
-const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSd3lkH75uSufuwNEllHmrXZQmxXnq-w1T2SBLne6kO7JiUJvA/viewform?usp=header';
 
 function prepareGoogleForm() {
     if (cart.length === 0) return alert('買い目がありません');
