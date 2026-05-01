@@ -29,10 +29,42 @@ window.addEventListener('DOMContentLoaded', async () => {
         initMsHeader();
         renderCart();
         // 前回のタブを復元
-        const savedTab = localStorage.getItem(TAB_STORAGE_KEY) || 'win-place';
-        const tabEl = document.querySelector(`.tab-menu li[data-type="${savedTab}"]`);
-        if (tabEl) switchTab(savedTab, tabEl);
-        else render();
+        // URLパラメータからフォーメーションを復元（印ページからの遷移）
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlTab  = urlParams.get('tab');
+        const urlMode = urlParams.get('mode');
+        const urlR0   = urlParams.get('r0');
+        const urlR1   = urlParams.get('r1');
+        const urlR2   = urlParams.get('r2');
+
+        if (urlTab && urlMode === 'formation') {
+            const tabEl2 = document.querySelector(`.tab-menu li[data-type="${urlTab}"]`);
+            if (tabEl2) {
+                switchTab(urlTab, tabEl2);
+                // モードをフォーメーションに設定
+                const fBtn = document.querySelector('[data-mode="formation"]');
+                if (fBtn) switchVoteMode('formation', fBtn);
+                // 各行に値をセット
+                const parseNums = s => (s||'').split(',').map(n=>parseInt(n)).filter(n=>!isNaN(n));
+                msRows[0] = new Set(parseNums(urlR0));
+                msRows[1] = new Set(parseNums(urlR1));
+                msRows[2] = new Set(parseNums(urlR2));
+                getCurrentMsState().rows = msRows;
+                buildMsRows();
+                updateMsCombCount();
+                saveMsState();
+                render();
+                // マークシートまでスクロール
+                setTimeout(() => {
+                    document.getElementById('marksheet-area').scrollIntoView({ behavior:'smooth', block:'start' });
+                }, 300);
+            }
+        } else {
+            const savedTab = localStorage.getItem(TAB_STORAGE_KEY) || 'win-place';
+            const tabEl = document.querySelector(`.tab-menu li[data-type="${savedTab}"]`);
+            if (tabEl) switchTab(savedTab, tabEl);
+            else render();
+        }
     } catch (e) {
         console.error('データ読み込み失敗:', e);
         document.body.insertAdjacentHTML('afterbegin',

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premier Series 26-27予想企画 — まとめて送る</title>
+    <title>Premier Series 26-27予想企画 — 買い目を送る</title>
     <link rel="icon" href="favicon.ico">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <link rel="stylesheet" href="css/style.css">
@@ -36,11 +36,11 @@
     <a href="index.html">出馬表</a>
     <a href="marks.html">印をつける</a>
     <a href="odds.html">オッズ</a>
-    <a href="submit.html" class="active">まとめて送る</a>
+    <a href="submit.html" class="active">買い目を送る</a>
     <a href="help.html">使い方</a>
 </nav>
 
-<div class="section-title">まとめて送る</div>
+<div class="section-title">買い目を送る</div>
 
 <p style="font-size:.9em;line-height:1.8;margin-bottom:16px;">
     印と買い目の内容を確認し、コピーしてGoogleフォームに送信してください。
@@ -113,10 +113,10 @@ window.addEventListener('DOMContentLoaded', async () => {
 function renderMarksCheck() {
     const el = document.getElementById('marks-check');
     if (!teamsData.length) { el.innerHTML = '<span class="status-warn">読み込み中...</span>'; return; }
-    const hasAll = UNIQUE_MARKS.every(m => Object.values(selectedMarks).includes(m));
-    const statusHtml = hasAll
-        ? '<span class="status-ok">✔ 必須印すべて入力済み</span>'
-        : '<span class="status-warn">⚠️ 必須印が未入力です</span>';
+    const hasHonmei = Object.values(selectedMarks).includes('honmei');
+    const statusHtml = hasHonmei
+        ? '<span class="status-ok">✔ 本命（◎）入力済み</span>'
+        : '<span class="status-warn">⚠️ 本命（◎）が付いていません</span>';
     const chips = teamsData.map(team => {
         const m = selectedMarks[String(team.id)];
         if (!m) return '';
@@ -142,8 +142,8 @@ function renderBetsCheck() {
 function checkWarnings() {
     const warnBox = document.getElementById('warn-box');
     const warnings = [];
-    const missing = UNIQUE_MARKS.filter(m => !Object.values(selectedMarks).includes(m));
-    if (missing.length) warnings.push(`必須印（${missing.map(m => MARK_LABELS[m]).join('　')}）が付いていません`);
+    const missing = !Object.values(selectedMarks).includes('honmei') ? ['honmei'] : [];
+    if (missing.length) warnings.push(`本命（◎）が付いていません`);
     if (!cart.length) warnings.push('買い目がありません');
     if (warnings.length) {
         warnBox.style.display = 'block';
