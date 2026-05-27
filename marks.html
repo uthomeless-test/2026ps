@@ -451,7 +451,7 @@ function drawHonmeiCanvas() {
     ctx.save();
     ctx.font='20px monospace';ctx.fillStyle='#bbb';
     ctx.textAlign='right';ctx.textBaseline='bottom';
-    ctx.fillText('#シャドバPS #シャドバPS予想企画',W-20,H-14);
+    ctx.fillText('',W-20,H-14);
     ctx.restore();
 }
 
@@ -547,7 +547,7 @@ function drawAllMarksCanvas() {
     ctx.save();
     ctx.font='20px monospace';ctx.fillStyle='#bbb';
     ctx.textAlign='center';ctx.textBaseline='bottom';
-    ctx.fillText('#シャドバPS #シャドバPS予想企画',W/2,H-14);
+    ctx.fillText('',W/2,H-14);
     ctx.restore();
 }
 
@@ -567,7 +567,7 @@ function updateTweetText() {
             });
     });
     const marksLine=parts.join(' ');
-    const text=marksLine?`${marksLine}\n#シャドバPS #シャドバPS予想企画`:'#シャドバPS #シャドバPS予想企画';
+    const text=marksLine?`${marksLine}\n`:'';
     document.getElementById('tweet-text').value=text;
 }
 

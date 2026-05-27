@@ -3,7 +3,7 @@
     "id": 1,
     "name": "Crazy Raccoon",
     "tag": "CR",
-    "logo": "assets/images/cr_logo.svg",
+    "logo": "assets/images/cr_logo.png",
     "members": [
       { "name": "Atom",   "x": "https://x.com/Atomu_sv",     "youtube": "https://www.youtube.com/channel/UC8yvw5d2_e--XXt8uw0aMTg" },
       { "name": "ふえた", "x": "https://x.com/saboten_sv",   "youtube": "https://www.youtube.com/channel/UCNnIhUQILBeaABXyzVQMq_w" },
@@ -15,7 +15,7 @@
     "id": 2,
     "name": "ZETA DIVISION",
     "tag": "ZETA",
-    "logo": "assets/images/zeta_logo.svg",
+    "logo": "assets/images/zeta_logo.png",
     "members": [
       { "name": "CQCQ",  "x": "https://x.com/cqcq_sv",      "youtube": "https://www.youtube.com/@cqcqshadowverse" },
       { "name": "ヘイム", "x": "https://x.com/heimu_v0122v", "youtube": "https://www.youtube.com/@heim_sv" },
@@ -26,7 +26,7 @@
     "id": 3,
     "name": "DetonatioN FocusMe",
     "tag": "DFM",
-    "logo": "assets/images/dfm_logo.svg",
+    "logo": "assets/images/dfm_logo.png",
     "members": [
       { "name": "ミル",   "x": "https://x.com/bbq_mill",   "youtube": "https://www.youtube.com/@bbq_mill39" },
       { "name": "ユーリ", "x": "https://x.com/yuuri8540",  "youtube": "https://www.youtube.com/@ch-dq9dh" },
@@ -37,7 +37,7 @@
     "id": 4,
     "name": "VARREL",
     "tag": "VRL",
-    "logo": "assets/images/varrel_logo.svg",
+    "logo": "assets/images/varrel_logo.png",
     "members": [
       { "name": "Mishadow51", "x": "https://x.com/Mishadow51",        "bilibili": "https://space.bilibili.com/169172902?spm_id_from=333.1007.0.0" },
       { "name": "Terarina",   "x": "https://x.com/tera_rina",         "youtube": "https://www.youtube.com/@terarina7187" },
@@ -48,7 +48,7 @@
     "id": 5,
     "name": "MURASH GAMING",
     "tag": "MRG",
-    "logo": "assets/images/mrg_logo.svg",
+    "logo": "assets/images/mrg_logo.png",
     "members": [
       { "name": "マイト",  "x": "https://x.com/maito_2626",  "youtube": "https://www.youtube.com/@%E3%83%9E%E3%82%A4%E3%83%88" },
       { "name": "glory",   "x": "https://x.com/glory__2020", "youtube": "https://www.youtube.com/@glory_2020" },
@@ -60,7 +60,7 @@
     "id": 6,
     "name": "REJECT",
     "tag": "RC",
-    "logo": "assets/images/reject_logo.svg",
+    "logo": "assets/images/reject_logo.png",
     "members": [
       { "name": "あぐのむ",   "x": "https://x.com/agunomomoclo", "youtube": "https://www.youtube.com/@%E3%81%82%E3%81%90%E3%81%AE%E3%82%80%E3%83%81%E3%83%A3%E3%83%B3%E3%83%8D%E3%83%AB" },
       { "name": "たばた",     "x": "https://x.com/tbt_sv12",     "youtube": "https://www.youtube.com/@tbtsv12" },
@@ -72,7 +72,7 @@
     "id": 7,
     "name": "RIDDLE",
     "tag": "RDL",
-    "logo": "assets/images/riddle_logo.svg",
+    "logo": "assets/images/riddle_logo.png",
     "members": [
       { "name": "折り紙",   "x": "https://x.com/Origami_sv",   "youtube": "https://www.youtube.com/@%E6%8A%98%E3%82%8A%E7%B4%99-c6m" },
       { "name": "メンバー2","x": "", "youtube": "" },
@@ -83,7 +83,7 @@
     "id": 8,
     "name": "レバンガ北海道",
     "tag": "LVH",
-    "logo": "assets/images/levanga_logo.svg",
+    "logo": "assets/images/levanga_logo.png",
     "members": [
       { "name": "Era53",   "x": "https://x.com/garbage_er",    "youtube": "https://www.youtube.com/@era5380" },
       { "name": "rikka",   "x": "https://x.com/karakuri1646",  "youtube": "https://www.youtube.com/@rikka1646" },
