@@ -412,6 +412,26 @@ table.odds-list tr.odds_row td[data-clickable]:hover {
     color: #fff;
 }
 
+/* ── カウントダウンバー ── */
+#countdown-bar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #f0f4ff;
+    border-bottom: 1px solid #c0cce8;
+    padding: 7px 16px;
+    font-size: .88em;
+}
+#countdown-bar.cd-urgent {
+    background: #fff3f0;
+    border-bottom-color: #f5b8b0;
+}
+.cd-label { color: #555; }
+.cd-value { font-weight: bold; color: var(--jra-blue); }
+.cd-value.cd-closed { color: #d00; }
+.cd-urgent .cd-value { color: #d00; }
+#countdown-bar strong { font-size: 1.15em; }
+
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
    スマホ専用スタイル（767px以下）
    PC版は一切変更しない
