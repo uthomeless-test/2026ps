@@ -9,12 +9,10 @@ const TAB_STORAGE_KEY   = 'tab_ps2627';
 // ── 開幕カウントダウン ────────────────────────────────
 // 開幕戦日時をここに設定（未定の場合は null のまま）
 // 例: new Date('2026-06-01T13:00:00+09:00')
-const KICKOFF = new Date('2026-07-07T13:00:00+09:00');
+const KICKOFF = null;
 
 function renderCountdown() {
-    const bar = document.getElementById('countdown-bar');
-    const el = document.getElementById('countdown-bar-inner') || bar;
-    if (!bar) return;
+    const el = document.getElementById('countdown-bar');
     if (!el) return;
 
     if (!KICKOFF) {

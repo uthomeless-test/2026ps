@@ -6,54 +6,29 @@
     <title>使い方 — Premier Series 26-27予想企画</title>
     <link rel="icon" href="favicon.ico">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <style>
         .help-wrap { max-width: 800px; margin: 0 auto; padding: 0 16px 40px; }
-        .help-card { border: 1px solid #ddd; border-radius: 8px; padding: 20px 24px; margin-bottom: 16px; background: #fff; }
-        .help-card h2 { margin: 0 0 10px; font-size: 1.05em; color: #003399; }
-        .help-card p { margin: 0 0 8px; line-height: 1.8; color: #333; font-size: .92em; }
-        .help-card p:last-child { margin-bottom: 0; }
-        .btn-link { display: inline-block; margin-top: 10px; padding: 8px 20px; background: #003399; color: #fff; border-radius: 4px; text-decoration: none; font-weight: bold; font-size: .88em; }
-        .btn-link:hover { background: #0044cc; }
-        .btn-link + .btn-link { margin-left: 8px; }
+        .help-card { border: 1px solid #ddd; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px; background: #fff; }
+        .help-card h2 { margin: 0 0 8px; font-size: 1.1em; color: #003399; }
+        .help-card p { margin: 0 0 8px; line-height: 1.7; color: #333; }
+        .help-card .btn-link { display: inline-block; margin-top: 10px; padding: 8px 20px; background: #003399; color: #fff; border-radius: 4px; text-decoration: none; font-weight: bold; font-size: .9em; }
+        .help-card .btn-link:hover { background: #0044cc; }
         .step-list { list-style: none; padding: 0; margin: 10px 0 0; counter-reset: step; }
-        .step-list li { counter-increment: step; padding: 8px 0 8px 36px; position: relative; border-bottom: 1px solid #eee; line-height: 1.7; font-size: .92em; color: #333; }
+        .step-list li { counter-increment: step; padding: 8px 0 8px 36px; position: relative; border-bottom: 1px solid #eee; line-height: 1.6; }
         .step-list li:last-child { border-bottom: none; }
-        .step-list li::before { content: counter(step); position: absolute; left: 0; top: 9px; width: 24px; height: 24px; background: #003399; color: #fff; border-radius: 50%; font-size: .78em; font-weight: bold; display: flex; align-items: center; justify-content: center; }
-        .rule-row { display: flex; gap: 8px; font-size: .92em; line-height: 1.7; color: #333; margin-bottom: 4px; }
-        .rule-label { font-weight: bold; white-space: nowrap; min-width: 90px; }
-        .note-box { margin-top: 12px; padding: 8px 12px; background: #f0f4ff; border-left: 3px solid #003399; font-size: .86em; line-height: 1.7; color: #333; }
-        @media (max-width: 767px) {
-            .help-wrap { padding: 0 10px 40px; }
-            .help-card { padding: 16px; }
-            .btn-link + .btn-link { margin-left: 0; margin-top: 8px; display: block; width: fit-content; }
-        }
+        .step-list li::before { content: counter(step); position: absolute; left: 0; top: 8px; width: 24px; height: 24px; background: #003399; color: #fff; border-radius: 50%; font-size: .8em; font-weight: bold; display: flex; align-items: center; justify-content: center; }
     </style>
 </head>
 <body>
-<header class="site-header">
-    <div class="header-inner">
-        <a href="index.html" class="site-logo">
-            <img src="assets/images/logo.png" alt="PS予想企画" class="site-logo-img">
-            <div class="site-logo-text">
-                <span class="site-logo-main">PS予想企画</span>
-                <span class="site-logo-sub">PREMIER SERIES 26-27</span>
-            </div>
-        </a>
-    </div>
-</header>
 <nav class="page-nav">
     <a href="index.html">出馬表</a>
     <a href="marks.html">印</a>
     <a href="odds.html">オッズ</a>
     <a href="submit.html">買い目を送る</a>
     <a href="help.html" class="active">使い方</a>
-    <a href="faq.html">Q&A</a>
 </nav>
-<div id="countdown-bar"><div id="countdown-bar-inner"></div></div>
+<div id="countdown-bar"></div>
 
 <div class="help-wrap">
 
@@ -77,23 +52,29 @@
 
 <div class="help-card">
     <h2>📌 ルール</h2>
-    <div class="rule-row"><span class="rule-label">締め切り</span><span>Premier Series開幕戦の試合開始時間</span></div>
-    <div class="rule-row"><span class="rule-label">予算上限</span><span>合計 20,000pt まで</span></div>
-    <div class="rule-row"><span class="rule-label">投票回数</span><span>1人1回のみ（複数回送信した場合は最後の送信を有効とします）</span></div>
-    <div class="rule-row"><span class="rule-label">的中計算</span><span>賭けたpt × オッズ（複勝・ワイドは主催者が計算）</span></div>
-    <div class="rule-row"><span class="rule-label">結果発表</span><span>シーズン終了時（途中経過の発表なし）</span></div>
-    <div class="note-box">📌 <strong>買い目の送信は必須です。</strong>印（◎○▲など）の入力は任意です。印なしでも参加できます。</div>
+    <p><strong>締め切り：</strong>Premier Series開幕戦の試合開始時間</p>
+    <p><strong>予算上限：</strong>合計20,000ptまで</p>
+    <p><strong>投票回数：</strong>1人1回のみ</p>
+    <p><strong>的中計算：</strong>賭けたpt × オッズ（複勝・ワイドは主催者が計算）</p>
+    <p><strong>結果発表：</strong>シーズン終了時</p>
+    <p><strong>途中経過：</strong>発表なし</p>
+    <p style="margin-top:10px;padding:8px 12px;background:#f0f4ff;border-left:3px solid #003399;font-size:.88em;line-height:1.7;">
+        📌 <strong>買い目の送信は必須です。</strong>印（◎○▲など）の入力は任意です。印なしでも参加できます。印を付ける場合は◎（本命）を必ず1チームに設定してください。
+    </p>
 </div>
 
 <div class="help-card">
     <h2>📖 詳しいガイド</h2>
     <p>券種（単勝・複勝・ワイドなど）が初めての方は、まず券種の説明をご覧ください。</p>
     <a class="btn-link" href="guide-basic.html">券種の説明を読む</a>
-    <a class="btn-link" style="background:#007d43;" href="guide-how.html">操作手順を読む</a>
+    <a class="btn-link" style="margin-left:8px; background:#007d43;" href="guide-how.html">操作手順を読む</a>
+</div>
+
+<div class="help-card">
+    <h2>❓ よくある質問</h2>
+    <a class="btn-link" href="faq.html">Q&amp;Aを見る</a>
 </div>
 
 </div>
-<script src="js/common.js"></script>
-<script>document.addEventListener("DOMContentLoaded", renderCountdown);</script>
 </body>
 </html>
