@@ -344,15 +344,15 @@ function getMsCombinations() {
     return res;
 }
 
-function applyMarksheet() {
+async function applyMarksheet() {
     const combs = getMsCombinations();
     filterMode = combs.length > 0;
     render();
 }
 
-function setMarksheet() {
+async function setMarksheet() {
     const combs = getMsCombinations();
-    if (combs.length === 0) return alert('買い目を選択してください');
+    if (combs.length === 0) return await psAlert('買い目を選択してください');
     const modeNames = { formation: 'フォーメーション', box: 'ボックス', axis1: '1チーム軸マルチ', axis2: '2チーム軸マルチ' };
     const displayType = document.querySelector('.tab-menu li.active').innerText;
     let formationStr = '';
@@ -525,7 +525,7 @@ function renderCart() {
 
 function removeFromCart(id) { cart = cart.filter(i => i.id !== id); saveCart(); renderCart(); }
 
-function clearCart() {
+async function clearCart() {
     // スマホでconfirm()がブロックされる場合があるためカスタムダイアログを使用
     const overlay = document.createElement('div');
     overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;display:flex;align-items:center;justify-content:center;';
@@ -659,7 +659,7 @@ function npConfirm() {
     let currentTotal = 0;
     cart.forEach(i => { if (i.id !== id) currentTotal += i.combs.length * i.amountPerBet; });
     if (currentTotal + budget > BUDGET_LIMIT) {
-        alert(`予算超過：残り利用可能は ${(BUDGET_LIMIT - currentTotal).toLocaleString()} pt です`);
+        await psAlert(`予算超過：残り利用可能は ${(BUDGET_LIMIT - currentTotal).toLocaleString()} pt です`);
         return;
     }
 
@@ -674,7 +674,7 @@ function npConfirm() {
 
     // 最低100pt×点数が予算を超える場合は中断
     if (minTotal > budget) {
-        alert(`点数が多すぎて予算内に収まりません。予算を増やすか、買い目を減らしてください。\n（最低必要: ${minTotal.toLocaleString()}pt / 設定予算: ${budget.toLocaleString()}pt）`);
+        await psAlert(`点数が多すぎて予算内に収まりません。予算を増やすか、買い目を減らしてください。\n（最低必要: ${minTotal.toLocaleString()}pt / 設定予算: ${budget.toLocaleString()}pt）`);
         return;
     }
 
@@ -703,7 +703,7 @@ function npConfirm() {
 // ── フォーム出力 ─────────────────────────────────────
 
 function prepareGoogleForm() {
-    if (cart.length === 0) return alert('買い目がありません');
+    if (cart.length === 0) return await psAlert('買い目がありません');
     let exportData = '【Premier Series 26-27 買い目】\n';
     cart.forEach(item => {
         exportData += `[${item.displayType}] ${item.formation} / ${item.combs.length}点 / 各${item.amountPerBet}pt / 計${item.combs.length * item.amountPerBet}pt\n`;
@@ -715,7 +715,7 @@ function prepareGoogleForm() {
     document.getElementById('form-export-area').classList.remove('hidden');
 }
 
-function copyFormData() {
+async function copyFormData() {
     const text = document.getElementById('form-data-text').value;
     if (!text) return;
 
@@ -747,9 +747,386 @@ function fallbackCopy(text, onSuccess) {
     try {
         const ok = document.execCommand('copy');
         if (ok) onSuccess();
-        else alert('コピーできませんでした。手動で選択してコピーしてください。');
+        else await psAlert('コピーできませんでした。手動で選択してコピーしてください。');
     } catch (e) {
-        alert('コピーできませんでした。手動で選択してコピーしてください。');
+        await psAlert('コピーできませんでした。手動で選択してコピーしてください。');
     }
     ta.setAttribute('readonly', '');
 }
+
+// ══════════════════════════════════════════════════════
+//   スマホ専用オッズUI
+// ══════════════════════════════════════════════════════
+
+let spType     = 'win-place';
+let spSortMode = 'num';
+let spVoteMode = 'formation';
+let spMsRows   = [new Set(), new Set(), new Set()];
+let spFilterMode = false;
+let spCartOpen = false;
+
+const TYPE_LABELS = {
+    'win-place':'単勝・複勝', quinella:'2連複', wide:'ワイド',
+    exacta:'2連単', trio:'3連複', trifecta:'3連単'
+};
+const FRAME_COLORS = {
+    1:{bg:'#f0f0f0',fg:'#111'}, 2:{bg:'#111',fg:'#fff'},
+    3:{bg:'#cc2200',fg:'#fff'}, 4:{bg:'#1a4fd6',fg:'#fff'},
+    5:{bg:'#d4a000',fg:'#111'}, 6:{bg:'#1a7a3a',fg:'#fff'},
+    7:{bg:'#d06000',fg:'#fff'}, 8:{bg:'#c0357a',fg:'#fff'},
+};
+
+// スマホ判定
+function isSP() { return window.innerWidth <= 767; }
+
+// 初期化（DOMContentLoaded後にteamsが揃ってから呼ぶ）
+function initSP() {
+    spRenderMs();
+    spRender();
+    spRenderCart();
+}
+
+// ── 券種切り替え ──
+function spSwitchType(type, el) {
+    spType = type;
+    spFilterMode = false;
+    spMsRows = [new Set(), new Set(), new Set()];
+    spVoteMode = 'formation';
+    document.querySelectorAll('.sp-type-tab').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+
+    // マークシートの表示制御
+    const msWrap = document.getElementById('sp-ms-wrap');
+    msWrap.style.display = type === 'win-place' ? 'none' : '';
+
+    // 軸ボタンの表示制御
+    const axis1 = document.getElementById('sp-btn-axis1');
+    const axis2 = document.getElementById('sp-btn-axis2');
+    if (type === 'trifecta') { axis1.style.display=''; axis2.style.display=''; }
+    else if (type === 'exacta') { axis1.style.display=''; axis2.style.display='none'; }
+    else { axis1.style.display='none'; axis2.style.display='none'; }
+
+    // モードをformationに戻す
+    document.querySelectorAll('.sp-ms-mode-btn').forEach(b => b.classList.remove('active'));
+    const fBtn = document.querySelector('.sp-ms-mode-btn[data-mode="formation"]');
+    if (fBtn) fBtn.classList.add('active');
+
+    spRenderMs();
+    spRender();
+}
+
+// ── ソート切り替え ──
+function spSetSort(mode) {
+    spSortMode = mode;
+    document.getElementById('sp-btn-num').classList.toggle('active', mode==='num');
+    document.getElementById('sp-btn-pop').classList.toggle('active', mode==='pop');
+    spRender();
+}
+
+// ── モード切り替え ──
+function spSwitchMode(mode, el) {
+    spVoteMode = mode;
+    spMsRows = [new Set(), new Set(), new Set()];
+    document.querySelectorAll('.sp-ms-mode-btn').forEach(b => b.classList.remove('active'));
+    el.classList.add('active');
+    spRenderMs();
+    spUpdateMsCount();
+}
+
+// ── マークシート描画 ──
+function spRenderMs() {
+    const wrap = document.getElementById('sp-ms-rows');
+    const is3 = (spType === 'trio' || spType === 'trifecta');
+
+    let rowDefs;
+    if (spVoteMode === 'box')   rowDefs = [{ label:'ボックス', ri:0 }];
+    else if (spVoteMode === 'axis1') rowDefs = [{ label:'軸（1チーム）', ri:0 }, { label:'相手', ri:1 }];
+    else if (spVoteMode === 'axis2') rowDefs = [{ label:'軸（2チーム）', ri:0 }, { label:'相手', ri:1 }];
+    else rowDefs = is3
+        ? [{ label:'1列目', ri:0 }, { label:'2列目', ri:1 }, { label:'3列目', ri:2 }]
+        : [{ label:'1列目', ri:0 }, { label:'2列目', ri:1 }];
+
+    wrap.innerHTML = rowDefs.map(({ label, ri }) => {
+        const btns = teams.map((t, ci) => {
+            const num = ci + 1;
+            const isMarked = spMsRows[ri].has(num);
+            let cls = 'sp-ms-btn';
+            if (isMarked) {
+                if (ri===0 && (spVoteMode==='axis1'||spVoteMode==='axis2')) cls += ' axis1';
+                else if (ri===1 && spVoteMode==='axis2') cls += ' axis2';
+                else cls += ' marked';
+            }
+            return `<button class="${cls}" onclick="spToggleMs(${ri},${num})">${num}</button>`;
+        }).join('');
+        return `<div class="sp-ms-row">
+            <div class="sp-ms-row-label">${label}</div>
+            <div class="sp-ms-btns">${btns}
+                <button class="sp-ms-btn" style="background:#e8f5e9;color:#1a7a3a;border-color:#1a7a3a;font-size:.65rem;" onclick="spBulkMs(${ri},true)">全</button>
+                <button class="sp-ms-btn" style="background:#fff0f0;color:#d00;border-color:#d00;font-size:.65rem;" onclick="spBulkMs(${ri},false)">消</button>
+            </div>
+        </div>`;
+    }).join('');
+    spUpdateMsCount();
+}
+
+function spToggleMs(ri, num) {
+    if (spMsRows[ri].has(num)) spMsRows[ri].delete(num);
+    else {
+        if (spVoteMode === 'axis1' && ri === 0 && spMsRows[0].size >= 1) return;
+        if (spVoteMode === 'axis2' && ri === 0 && spMsRows[0].size >= 2) return;
+        spMsRows[ri].add(num);
+    }
+    spRenderMs();
+}
+
+function spBulkMs(ri, val) {
+    if (val) teams.forEach((_, ci) => spMsRows[ri].add(ci+1));
+    else spMsRows[ri].clear();
+    spRenderMs();
+}
+
+function spUpdateMsCount() {
+    document.getElementById('sp-ms-count').textContent = spGetCombinations().length;
+}
+
+function spGetCombinations() {
+    const r0 = [...spMsRows[0]];
+    const r1 = [...spMsRows[1]];
+    const r2 = [...spMsRows[2]];
+    const is3 = (spType === 'trio' || spType === 'trifecta');
+    const isExacta = (spType === 'exacta' || spType === 'trifecta');
+
+    if (spVoteMode === 'box') {
+        if (!isExacta) {
+            const res = [];
+            r0.sort((a,b)=>a-b);
+            for (let i=0;i<r0.length;i++) for (let j=i+1;j<r0.length;j++) {
+                if (is3) for (let k=j+1;k<r0.length;k++) res.push(`${r0[i]}-${r0[j]}-${r0[k]}`);
+                else res.push(`${r0[i]}-${r0[j]}`);
+            }
+            return res;
+        } else {
+            const res = [];
+            r0.forEach(a => r0.forEach(b => { if (a!==b) {
+                if (is3) r0.forEach(c => { if (c!==a&&c!==b) res.push(`${a}-${b}-${c}`); });
+                else res.push(`${a}-${b}`);
+            }}));
+            return res;
+        }
+    }
+    if (spVoteMode === 'axis1') {
+        const ax = r0[0]; if (!ax) return [];
+        const res = [];
+        r1.filter(x=>x!==ax).forEach(b => {
+            if (is3) r1.filter(x=>x!==ax&&x!==b).forEach(c => {
+                [[ax,b,c],[ax,c,b],[b,ax,c],[b,c,ax],[c,ax,b],[c,b,ax]].forEach(p => res.push(p.join('-')));
+            });
+            else res.push(`${ax}-${b}`, `${b}-${ax}`);
+        });
+        return [...new Set(res)];
+    }
+    if (spVoteMode === 'axis2') {
+        const axs = r0.slice(0,2); if (axs.length<2) return [];
+        const [a1,a2] = axs;
+        return r1.filter(x=>x!==a1&&x!==a2).flatMap(b => [
+            `${a1}-${a2}-${b}`,`${a1}-${b}-${a2}`,`${a2}-${a1}-${b}`,
+            `${a2}-${b}-${a1}`,`${b}-${a1}-${a2}`,`${b}-${a2}-${a1}`
+        ]);
+    }
+    // フォーメーション
+    if (!is3) {
+        const res = [];
+        r0.forEach(a => r1.forEach(b => {
+            if (a===b) return;
+            const key = isExacta ? `${a}-${b}` : [a,b].sort((x,y)=>x-y).join('-');
+            if (!res.includes(key)) res.push(key);
+        }));
+        return res;
+    } else {
+        const res = [];
+        r0.forEach(a => r1.forEach(b => r2.forEach(c => {
+            if (new Set([a,b,c]).size < 3) return;
+            const key = isExacta ? `${a}-${b}-${c}` : [a,b,c].sort((x,y)=>x-y).join('-');
+            if (!res.includes(key)) res.push(key);
+        })));
+        return res;
+    }
+}
+
+// ── オッズリスト描画 ──
+function spRender() {
+    const container = document.getElementById('sp-odds-list');
+
+    if (spType === 'win-place') {
+        let list = teams.map((t, i) => ({
+            no: i+1, name: t.name, tag: t.tag,
+            win:   (oddsData.win   || {})[i+1],
+            place: (oddsData.place || {})[i+1],
+        }));
+        if (spSortMode === 'pop') list.sort((a,b) => parseFloat(a.win)-parseFloat(b.win));
+        container.innerHTML = list.map(item => {
+            const fc = FRAME_COLORS[item.no] || {bg:'#999',fg:'#fff'};
+            return `<div class="sp-odds-item" onclick="spAddWinPlace(${item.no})">
+                <div class="sp-odds-frame" style="background:${fc.bg};color:${fc.fg}">${item.no}</div>
+                <div class="sp-odds-item-body">
+                    <div class="sp-odds-team">${item.name}</div>
+                    <div class="sp-odds-comb">複勝: <span class="sp-odds-val" style="font-size:.85rem;color:#333">${item.place||'---'}</span></div>
+                </div>
+                <div class="sp-odds-val-wrap">
+                    <div class="sp-odds-val ${getOddsClass(item.win,'win')}">${item.win||'---'}</div>
+                    <div style="font-size:.65rem;color:#aaa">単勝</div>
+                </div>
+            </div>`;
+        }).join('');
+        return;
+    }
+
+    const combs = spFilterMode ? spGetCombinations() : Object.keys(oddsData[spType] || {});
+    let dataArr = combs.map(key => {
+        const val = (oddsData[spType]||{})[key] || '---';
+        return { key, val, sortVal: parseFloat(val.split('-')[0]) || 99999 };
+    });
+    if (spSortMode === 'pop') dataArr.sort((a,b) => a.sortVal - b.sortVal);
+    else dataArr.sort((a,b) => {
+        const ak = a.key.split('-').map(n=>n.padStart(2,'0')).join('');
+        const bk = b.key.split('-').map(n=>n.padStart(2,'0')).join('');
+        return ak.localeCompare(bk);
+    });
+
+    container.innerHTML = dataArr.map(d => {
+        const nums = d.key.split('-').map(Number);
+        const firstNum = nums[0];
+        const fc = FRAME_COLORS[firstNum] || {bg:'#999',fg:'#fff'};
+        const teamNames = nums.map(n => {
+            const t = teams[n-1];
+            return t ? t.tag : String(n);
+        }).join(' - ');
+        return `<div class="sp-odds-item" data-comb="${d.key}" onclick="spAddComb('${d.key}')">
+            <div class="sp-odds-frame" style="background:${fc.bg};color:${fc.fg}">${firstNum}</div>
+            <div class="sp-odds-item-body">
+                <div class="sp-odds-comb">${d.key}</div>
+                <div class="sp-odds-team">${teamNames}</div>
+            </div>
+            <div class="sp-odds-val-wrap">
+                <div class="sp-odds-val ${getOddsClass(d.val, spType)}">${d.val}</div>
+            </div>
+        </div>`;
+    }).join('') || '<div style="padding:20px;text-align:center;color:#aaa;font-size:.88rem;">該当する買い目がありません</div>';
+}
+
+// ── マークシートからオッズ表示・セット ──
+function spApplyMs() {
+    spFilterMode = true;
+    spRender();
+}
+async function spSetMs() {
+    const combs = spGetCombinations();
+    if (!combs.length) { await psAlert('買い目を選択してください'); return; }
+    const label = TYPE_LABELS[spType] || spType;
+    const formation = spMsRows.map(r=>[...r].sort((a,b)=>a-b).join(',')).filter(s=>s).join(' / ');
+    cart.push({ id: genId(), displayType: label, type: spType, formation, combs, amountPerBet: 100 });
+    saveCart();
+    spRenderCart();
+}
+
+// ── 買い目追加 ──
+function spAddWinPlace(no) {
+    // 単勝タップ → 単勝を追加、もう一度タップ → 複勝追加の代わりにトグル表示
+    // シンプルに単勝のみ追加（複勝は別途対応）
+    const t = teams[no-1];
+    const name = t ? t.tag : String(no);
+    cart.push({ id: genId(), displayType:'単勝', type:'win', formation: String(no), combs:[String(no)], amountPerBet:100 });
+    saveCart();
+    spRenderCart();
+    spFlashItem(no);
+}
+
+function spAddComb(key) {
+    const label = TYPE_LABELS[spType] || spType;
+    cart.push({ id: genId(), displayType: label, type: spType, formation: key, combs: [key], amountPerBet: 100 });
+    saveCart();
+    spRenderCart();
+    // フラッシュ
+    const el = document.querySelector(`.sp-odds-item[data-comb="${key}"]`);
+    if (el) { el.classList.add('added'); setTimeout(() => el.classList.remove('added'), 600); }
+}
+
+function spFlashItem(no) {
+    const items = document.querySelectorAll('.sp-odds-item');
+    items.forEach(el => {
+        const frame = el.querySelector('.sp-odds-frame');
+        if (frame && frame.textContent.trim() === String(no)) {
+            el.classList.add('added');
+            setTimeout(() => el.classList.remove('added'), 600);
+        }
+    });
+}
+
+// ── SP カート ──
+function spRenderCart() {
+    const count = cart.length;
+    const total = cart.reduce((s,i) => s + i.combs.length * i.amountPerBet, 0);
+    const rem   = 20000 - total;
+
+    document.getElementById('sp-cart-count').textContent = count;
+    document.getElementById('sp-cart-total').textContent = total.toLocaleString();
+    const remEl = document.getElementById('sp-budget-rem');
+    remEl.textContent = rem.toLocaleString() + ' pt';
+    remEl.className = 'sp-budget-rem' + (rem < 0 ? ' over' : '');
+
+    const detail = document.getElementById('sp-cart-detail');
+    if (!count) {
+        detail.innerHTML = '<div style="padding:12px 14px;color:#888;font-size:.82rem;">買い目がありません</div>';
+        return;
+    }
+    detail.innerHTML = cart.map(item => `
+        <div class="sp-cart-item">
+            <span class="sp-cart-item-type">${item.displayType}</span>
+            <span class="sp-cart-item-comb">${item.formation} ${item.combs.length>1?`(${item.combs.length}点)`:''}</span>
+            <span class="sp-cart-item-amt" onclick="spOpenNumpad(${item.id})">[${item.amountPerBet/100}]00pt</span>
+            <button class="sp-cart-item-del" onclick="spRemove(${item.id})">✕</button>
+        </div>`).join('');
+
+    // PC版カートも同期
+    renderCart();
+}
+
+function spToggleCart() {
+    spCartOpen = !spCartOpen;
+    document.getElementById('sp-cart-detail').classList.toggle('open', spCartOpen);
+    document.getElementById('sp-cart-toggle').textContent = spCartOpen ? '▼ 閉じる' : '▲ 開く';
+}
+
+function spRemove(id) {
+    cart = cart.filter(i => i.id !== id);
+    saveCart();
+    spRenderCart();
+}
+
+async function spClearCart() {
+    const ok = await psConfirm('買い目をすべて削除します。よろしいですか？');
+    if (!ok) return;
+    cart = []; saveCart(); spRenderCart();
+}
+
+function spOpenNumpad(id) {
+    openNumpad(id);
+    // テンキー確定後にSPカートも更新するためフックを追加
+    const origConfirm = window._spNumpadHooked;
+    if (!origConfirm) {
+        window._spNumpadHooked = true;
+        const orig = npConfirm;
+        window.npConfirm = function() {
+            orig();
+            spRenderCart();
+        };
+    }
+}
+
+// ── DOMContentLoaded後に初期化 ──
+document.addEventListener('DOMContentLoaded', () => {
+    // teamsが揃ってから初期化（既存のDOMContentLoadedの後に実行）
+    setTimeout(() => {
+        if (isSP() && teams.length) initSP();
+    }, 100);
+});

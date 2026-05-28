@@ -7,17 +7,34 @@
     <link rel="icon" href="favicon.ico">
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <link rel="stylesheet" href="css/style.css">
+<style>
+.odds-page-wrap { max-width: 1100px; margin: 0 auto; padding: 0 16px 40px; }
+@media (max-width: 767px) { .odds-page-wrap { padding: 0 10px 40px; } }
+</style>
 </head>
 <body>
 
+<header class="site-header">
+    <div class="header-inner">
+        <a href="index.html" class="site-logo">
+            <img src="assets/images/logo.png" alt="PS予想企画" class="site-logo-img">
+            <div class="site-logo-text">
+                <span class="site-logo-main">PS予想企画</span>
+                <span class="site-logo-sub">PREMIER SERIES 26-27</span>
+            </div>
+        </a>
+    </div>
+</header>
 <nav class="page-nav">
     <a href="index.html">出馬表</a>
     <a href="marks.html">印</a>
     <a href="odds.html" class="active">オッズ</a>
     <a href="submit.html">買い目を送る</a>
     <a href="help.html">使い方</a>
+    <a href="faq.html">Q&A</a>
 </nav>
-<div id="countdown-bar"></div>
+<div id="countdown-bar"><div id="countdown-bar-inner"></div></div>
+<div class="odds-page-wrap">
 
 <div class="section-title">出場チーム一覧</div>
 <table class="team-table" id="teamHeader"></table>
@@ -122,7 +139,7 @@
     <div style="margin-top:12px;padding:12px;background:#fff8e1;border:1px solid #ffd54f;border-radius:4px;font-size:.85em;">
         コピーしたら、Googleフォームの「買い目」欄に貼り付けて送信してください。
         <div style="margin-top:8px;">
-            <a id="btn-open-form" href="https://docs.google.com/forms/d/e/1FAIpQLSd3lkH75uSufuwNEllHmrXZQmxXnq-w1T2SBLne6kO7JiUJvA/viewform?usp=header" target="_blank"
+            <a id="btn-open-form" id="btn-open-form" href="#" target="_blank"
                style="display:inline-block;padding:10px 24px;background:#003399;color:#fff;font-weight:bold;border-radius:4px;text-decoration:none;font-size:1em;">
                 📝 Googleフォームを開く
             </a>
@@ -134,6 +151,231 @@
 </div>
 
 <script src="js/common.js"></script>
+<script>document.addEventListener("DOMContentLoaded",function(){ var b=document.getElementById("btn-open-form"); if(b) b.href=GOOGLE_FORM_URL; });</script>
+<script>document.addEventListener("DOMContentLoaded", renderCountdown);</script>
 <script src="js/odds.js"></script>
+</div>
+
+<style>
+/* ── スマホ専用オッズUI ── */
+.sp-odds-ui { display: none; }
+
+@media (max-width: 767px) {
+    /* PC要素を隠す */
+    .section-title, .team-table, .tab-menu, .sort-controls,
+    .vote-mode-bar, .marksheet-area, #main-view, #bet-management,
+    #numpad-overlay, #form-export-area { display: none !important; }
+
+    .sp-odds-ui { display: block; padding: 0 0 80px; }
+
+    /* 券種タブ */
+    .sp-type-tabs {
+        display: flex; overflow-x: auto; scrollbar-width: none;
+        gap: 6px; padding: 10px 10px 6px;
+        border-bottom: 2px solid #003399;
+        position: sticky; top: 0; background: #fff; z-index: 100;
+    }
+    .sp-type-tabs::-webkit-scrollbar { display: none; }
+    .sp-type-tab {
+        flex-shrink: 0; padding: 7px 14px; border-radius: 20px;
+        border: 1.5px solid #003399; background: #fff; color: #003399;
+        font-size: .8rem; font-weight: 700; cursor: pointer;
+        font-family: 'Noto Sans JP', sans-serif;
+        -webkit-tap-highlight-color: transparent;
+    }
+    .sp-type-tab.active { background: #003399; color: #fff; }
+
+    /* ソート */
+    .sp-sort-bar {
+        display: flex; gap: 6px; padding: 8px 10px;
+        border-bottom: 1px solid #eee;
+    }
+    .sp-sort-btn {
+        padding: 5px 14px; border-radius: 4px; border: 1px solid #003399;
+        background: #fff; color: #003399; font-size: .78rem; font-weight: 700;
+        cursor: pointer; font-family: 'Noto Sans JP', sans-serif;
+    }
+    .sp-sort-btn.active { background: #003399; color: #fff; }
+
+    /* マークシート（SP版） */
+    .sp-ms-wrap { padding: 8px 10px; background: #f5f5f5; border-bottom: 1px solid #ddd; }
+    .sp-ms-label { font-size: .75rem; font-weight: 700; color: #555; margin-bottom: 6px; }
+    .sp-ms-row { margin-bottom: 8px; }
+    .sp-ms-row-label { font-size: .72rem; color: #888; margin-bottom: 4px; }
+    .sp-ms-btns { display: flex; flex-wrap: wrap; gap: 5px; }
+    .sp-ms-btn {
+        width: 38px; height: 34px; border-radius: 6px;
+        border: 1.5px solid #bbb; background: #fff;
+        font-size: .85rem; font-weight: 700; cursor: pointer;
+        font-family: 'Noto Sans JP', sans-serif;
+        -webkit-tap-highlight-color: transparent;
+        transition: background .1s, border-color .1s;
+    }
+    .sp-ms-btn.marked   { background: #003399; color: #fff; border-color: #003399; }
+    .sp-ms-btn.axis1    { background: #e91e63; color: #fff; border-color: #e91e63; }
+    .sp-ms-btn.axis2    { background: #ff9800; color: #fff; border-color: #ff9800; }
+    .sp-ms-mode-bar { display: flex; gap: 5px; margin-bottom: 8px; flex-wrap: wrap; }
+    .sp-ms-mode-btn {
+        padding: 5px 10px; border-radius: 4px;
+        border: 1.5px solid #003399; background: #fff; color: #003399;
+        font-size: .75rem; font-weight: 700; cursor: pointer;
+        font-family: 'Noto Sans JP', sans-serif;
+    }
+    .sp-ms-mode-btn.active { background: #003399; color: #fff; }
+    .sp-ms-actions { display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+    .sp-ms-apply-btn {
+        padding: 8px 16px; background: #ffeb3b; color: #000;
+        border: none; border-radius: 4px; font-weight: 700; font-size: .82rem;
+        cursor: pointer; font-family: 'Noto Sans JP', sans-serif;
+    }
+    .sp-ms-set-btn {
+        padding: 8px 16px; background: #e91e63; color: #fff;
+        border: none; border-radius: 4px; font-weight: 700; font-size: .82rem;
+        cursor: pointer; font-family: 'Noto Sans JP', sans-serif;
+    }
+    .sp-ms-comb { font-size: .78rem; color: #ffeb3b; font-weight: 700; }
+
+    /* オッズリスト */
+    .sp-odds-list { padding: 6px 10px; }
+    .sp-odds-item {
+        display: flex; align-items: center;
+        background: #fff; border: 1px solid #eee; border-radius: 8px;
+        margin-bottom: 6px; overflow: hidden;
+        -webkit-tap-highlight-color: transparent;
+        cursor: pointer; transition: background .12s;
+    }
+    .sp-odds-item:active { background: #fff9c4; }
+    .sp-odds-item.added  { background: #fffde7; border-color: #ffc107; }
+    .sp-odds-frame {
+        width: 34px; min-height: 52px; display: flex; align-items: center;
+        justify-content: center; font-size: 1rem; font-weight: 900; flex-shrink: 0;
+    }
+    .sp-f1{background:#f0f0f0;color:#111} .sp-f2{background:#111;color:#fff}
+    .sp-f3{background:#cc2200;color:#fff} .sp-f4{background:#1a4fd6;color:#fff}
+    .sp-f5{background:#d4a000;color:#111} .sp-f6{background:#1a7a3a;color:#fff}
+    .sp-f7{background:#d06000;color:#fff} .sp-f8{background:#c0357a;color:#fff}
+    .sp-odds-item-body { flex: 1; padding: 8px 10px; min-width: 0; }
+    .sp-odds-comb { font-size: .8rem; color: #555; font-family: monospace; }
+    .sp-odds-team { font-size: .84rem; font-weight: 700; color: #111; margin-top: 1px; }
+    .sp-odds-val-wrap { padding: 0 12px; text-align: right; flex-shrink: 0; }
+    .sp-odds-val { font-size: 1rem; font-weight: 900; }
+
+    /* SP カート */
+    .sp-cart-wrap {
+        position: fixed; bottom: 0; left: 0; right: 0; z-index: 200;
+        background: #222; color: #fff;
+        box-shadow: 0 -2px 10px rgba(0,0,0,.3);
+    }
+    .sp-cart-bar {
+        display: flex; align-items: center; justify-content: space-between;
+        padding: 8px 14px; cursor: pointer;
+    }
+    .sp-cart-bar-left { font-size: .82rem; }
+    .sp-cart-count { font-size: 1.1rem; font-weight: 900; color: #ffeb3b; }
+    .sp-cart-total { font-size: .78rem; color: #ccc; margin-top: 1px; }
+    .sp-cart-bar-right { display: flex; gap: 8px; align-items: center; }
+    .sp-cart-toggle { font-size: .75rem; color: #aaa; }
+    .sp-cart-detail { display: none; max-height: 50vh; overflow-y: auto; background: #2a2a2a; }
+    .sp-cart-detail.open { display: block; }
+    .sp-cart-item {
+        display: flex; align-items: center; gap: 8px;
+        padding: 8px 14px; border-bottom: 1px solid #333;
+    }
+    .sp-cart-item-type { font-size: .72rem; color: #aaa; flex-shrink: 0; }
+    .sp-cart-item-comb { font-size: .82rem; color: #fff; flex: 1; font-family: monospace; }
+    .sp-cart-item-amt {
+        font-size: .82rem; color: #ffeb3b; flex-shrink: 0;
+        cursor: pointer; border: 1px solid #555; border-radius: 4px;
+        padding: 2px 6px;
+    }
+    .sp-cart-item-del {
+        background: none; border: none; color: #e57; font-size: 1rem;
+        cursor: pointer; flex-shrink: 0; padding: 0 4px;
+        font-family: 'Noto Sans JP', sans-serif;
+    }
+    .sp-cart-actions {
+        display: flex; gap: 8px; padding: 8px 14px; background: #222;
+    }
+    .sp-cart-submit-btn {
+        flex: 1; padding: 10px; background: #007d43; color: #fff;
+        border: none; border-radius: 6px; font-weight: 700; font-size: .88rem;
+        cursor: pointer; font-family: 'Noto Sans JP', sans-serif;
+        text-decoration: none; text-align: center;
+    }
+    .sp-cart-clear-btn {
+        padding: 10px 14px; background: none; border: 1px solid #e57;
+        color: #e57; border-radius: 6px; font-size: .82rem;
+        cursor: pointer; font-family: 'Noto Sans JP', sans-serif;
+    }
+    .sp-budget-bar {
+        display: flex; justify-content: space-between; align-items: center;
+        padding: 4px 14px 6px; background: #1a1a1a; font-size: .72rem; color: #aaa;
+    }
+    .sp-budget-rem { font-weight: 700; color: #fff; }
+    .sp-budget-rem.over { color: #ff6b6b; }
+}
+</style>
+
+<!-- スマホ専用オッズUI -->
+<div class="sp-odds-ui" id="sp-odds-ui">
+
+  <!-- 券種タブ -->
+  <div class="sp-type-tabs" id="sp-type-tabs">
+    <button class="sp-type-tab active" data-type="win-place" onclick="spSwitchType('win-place',this)">単勝・複勝</button>
+    <button class="sp-type-tab" data-type="quinella"  onclick="spSwitchType('quinella',this)">2連複</button>
+    <button class="sp-type-tab" data-type="wide"      onclick="spSwitchType('wide',this)">ワイド</button>
+    <button class="sp-type-tab" data-type="exacta"    onclick="spSwitchType('exacta',this)">2連単</button>
+    <button class="sp-type-tab" data-type="trio"      onclick="spSwitchType('trio',this)">3連複</button>
+    <button class="sp-type-tab" data-type="trifecta"  onclick="spSwitchType('trifecta',this)">3連単</button>
+  </div>
+
+  <!-- ソート -->
+  <div class="sp-sort-bar">
+    <button class="sp-sort-btn active" id="sp-btn-num" onclick="spSetSort('num')">番号順</button>
+    <button class="sp-sort-btn" id="sp-btn-pop" onclick="spSetSort('pop')">人気順</button>
+  </div>
+
+  <!-- SP版マークシート -->
+  <div class="sp-ms-wrap" id="sp-ms-wrap">
+    <div class="sp-ms-mode-bar" id="sp-ms-mode-bar">
+      <button class="sp-ms-mode-btn active" data-mode="formation" onclick="spSwitchMode('formation',this)">フォーメーション</button>
+      <button class="sp-ms-mode-btn" data-mode="box" onclick="spSwitchMode('box',this)">ボックス</button>
+      <button class="sp-ms-mode-btn" data-mode="axis1" id="sp-btn-axis1" onclick="spSwitchMode('axis1',this)">1軸マルチ</button>
+      <button class="sp-ms-mode-btn" data-mode="axis2" id="sp-btn-axis2" onclick="spSwitchMode('axis2',this)">2軸マルチ</button>
+    </div>
+    <div id="sp-ms-rows"></div>
+    <div class="sp-ms-actions">
+      <div class="sp-ms-comb">組合せ: <span id="sp-ms-count">0</span> 通り</div>
+      <button class="sp-ms-apply-btn" onclick="spApplyMs()">オッズを表示</button>
+      <button class="sp-ms-set-btn" onclick="spSetMs()">買い目をセット</button>
+    </div>
+  </div>
+
+  <!-- オッズリスト -->
+  <div class="sp-odds-list" id="sp-odds-list"></div>
+
+  <!-- SP版カート -->
+  <div class="sp-cart-wrap" id="sp-cart-wrap">
+    <div class="sp-cart-bar" onclick="spToggleCart()">
+      <div class="sp-cart-bar-left">
+        <div>購入予定リスト <span class="sp-cart-count" id="sp-cart-count">0</span> 件</div>
+        <div class="sp-cart-total">合計: <span id="sp-cart-total">0</span> pt</div>
+      </div>
+      <div class="sp-cart-bar-right">
+        <span class="sp-cart-toggle" id="sp-cart-toggle">▲ 開く</span>
+      </div>
+    </div>
+    <div class="sp-budget-bar">
+      <span>残り予算</span>
+      <span class="sp-budget-rem" id="sp-budget-rem">20,000 pt</span>
+    </div>
+    <div class="sp-cart-detail" id="sp-cart-detail"></div>
+    <div class="sp-cart-actions">
+      <a href="submit.html" class="sp-cart-submit-btn">買い目を確認・送る →</a>
+      <button class="sp-cart-clear-btn" onclick="spClearCart()">全削除</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>

@@ -9,85 +9,60 @@
     <link rel="stylesheet" href="css/style.css">
     <style>
         :root {
-            --frame-1: #fff;    --frame-1-text: #111;
+            --navy: #0a1628;
+            --navy-mid: #1a2d4a;
+            --blue: #1a4fd6;
+            --blue-light: #e8eefb;
+            --text: #0a1628;
+            --text-sub: #5a6a82;
+            --border: #dde3ed;
+            --bg: #f5f7fb;
+            --white: #fff;
+            --frame-1: #f0f0f0; --frame-1-text: #111;
             --frame-2: #111;    --frame-2-text: #fff;
-            --frame-3: #d00;    --frame-3-text: #fff;
-            --frame-4: #1155cc; --frame-4-text: #fff;
-            --frame-5: #e6b800; --frame-5-text: #111;
-            --frame-6: #197a35; --frame-6-text: #fff;
-            --frame-7: #e07000; --frame-7-text: #fff;
-            --frame-8: #d4498a; --frame-8-text: #fff;
+            --frame-3: #cc2200; --frame-3-text: #fff;
+            --frame-4: #1a4fd6; --frame-4-text: #fff;
+            --frame-5: #d4a000; --frame-5-text: #111;
+            --frame-6: #1a7a3a; --frame-6-text: #fff;
+            --frame-7: #d06000; --frame-7-text: #fff;
+            --frame-8: #c0357a; --frame-8-text: #fff;
             --col-width: 110px;
             --label-width: 68px;
             --mark-size: 32px;
         }
+        body { font-family: 'Noto Sans JP', sans-serif; background: var(--bg); color: var(--text); margin: 0; font-size: 14px; -webkit-font-smoothing: antialiased; }
 
-        .page-inner { max-width: 1100px; margin: 0 auto; padding: 0 16px; }
+        /* ヘッダー */
+        .site-header { background: var(--navy); padding: 0 20px; }
+        .header-inner { max-width: 1100px; margin: 0 auto; height: 54px; display: flex; align-items: center; }
+        .site-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.35rem; color: #fff; letter-spacing: .07em; line-height: 1; }
+        .site-title span { font-family: 'Noto Sans JP', sans-serif; font-size: .6rem; color: rgba(255,255,255,.45); display: block; font-weight: 400; letter-spacing: .1em; margin-top: 2px; }
 
-        .seimai-outer {
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            margin: 12px 0 24px;
-            /* PC: 中央寄せ */
-            display: flex;
-            justify-content: center;
-        }
-        /* スマホでは左寄せ（justify-content:centerだとスクロール時に左端が切れる） */
-        @media (max-width: 767px) {
-            .seimai-outer { justify-content: flex-start; }
-        }
+        /* ナビ */
+        .page-nav { background: var(--navy-mid); border-bottom: 1px solid rgba(255,255,255,.08); position: sticky; top: 0; z-index: 1000; box-shadow: 0 2px 6px rgba(0,0,0,.15); }
 
-        .seimai-table {
-            display: flex;
-            flex-direction: row-reverse;
-            width: max-content;
-            border: 2px solid #222;
-            background: #fff;
-            flex-shrink: 0;
-        }
+        .page-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px 40px !important; box-sizing: border-box; }
+        .pc-view { display: block; }
+        .sp-view { display: none; }
 
-        .label-col {
-            width: var(--label-width);
-            display: flex;
-            flex-direction: column;
-            background: #f4f4f4;
-            border-left: 2px solid #222;
-            flex-shrink: 0;
-        }
-        .label-col .cell {
-            font-size: .78em;
-            font-weight: bold;
-            color: #333;
-            justify-content: center;
-            text-align: center;
-            background: #f4f4f4;
-        }
-        .label-col .row-num { background: #f4f4f4; }
-        .label-col .row-num .cell { color: #111; font-weight: bold; }
-        .label-col .row-odds { background: #f4f4f4; }
-        .label-col .row-odds .cell { color: #333; }
+        .page-heading-wrap { padding: 16px 0 10px; }
+        .page-label { font-size: .68rem; font-weight: 700; letter-spacing: .12em; color: var(--text-sub); text-transform: uppercase; margin-bottom: 3px; }
+        .page-heading { font-size: 1.3rem; font-weight: 900; color: var(--text); }
+        .page-heading em { font-style: normal; color: var(--blue); }
 
-        .team-col {
-            width: var(--col-width);
-            border-left: 1px solid #bbb;
-            display: flex;
-            flex-direction: column;
-        }
+        .mark-legend { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; padding: 8px 12px; background: var(--white); border: 1px solid var(--border); border-radius: 6px; margin-bottom: 14px; font-size: .8em; color: var(--text-sub); }
+        .mark-legend strong { color: var(--text); margin-right: 4px; }
+        .mark-legend-item { display: flex; align-items: center; gap: 4px; }
+        .mark-legend-item img { width: 20px; height: 20px; }
+
+        /* PC出馬表テーブル */
+        .seimai-outer { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 0 20px; display: flex; justify-content: center; }
+        .seimai-table { display: flex; flex-direction: row-reverse; width: max-content; border: 2px solid #222; background: var(--white); flex-shrink: 0; }
+        .label-col { width: var(--label-width); display: flex; flex-direction: column; background: #f4f4f4; border-left: 2px solid #222; flex-shrink: 0; }
+        .label-col .cell { font-size: .78em; font-weight: bold; color: #333; justify-content: center; text-align: center; background: #f4f4f4; }
+        .team-col { width: var(--col-width); border-left: 1px solid #bbb; display: flex; flex-direction: column; }
         .team-col:last-child { border-left: none; }
-
-        .cell {
-            border-bottom: 1px solid #ccc;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            padding: 4px;
-            font-size: .82em;
-            min-height: 32px;
-            box-sizing: border-box;
-            width: 100%;
-        }
-
+        .cell { border-bottom: 1px solid #ccc; display: flex; align-items: center; justify-content: center; text-align: center; padding: 4px; font-size: .82em; min-height: 32px; box-sizing: border-box; width: 100%; }
         .row-num .cell { font-size: 1.15em; font-weight: 900; min-height: 36px; border-bottom: 2px solid #222; }
         .frame-1 .row-num .cell { background: var(--frame-1); color: var(--frame-1-text); border-bottom: 2px solid #888; }
         .frame-2 .row-num .cell { background: var(--frame-2); color: var(--frame-2-text); }
@@ -97,77 +72,128 @@
         .frame-6 .row-num .cell { background: var(--frame-6); color: var(--frame-6-text); }
         .frame-7 .row-num .cell { background: var(--frame-7); color: var(--frame-7-text); }
         .frame-8 .row-num .cell { background: var(--frame-8); color: var(--frame-8-text); }
-
         .row-logo .cell { min-height: 72px; background: #fff; }
         .row-logo .cell img { width: 56px; height: 56px; object-fit: contain; }
         .logo-placeholder { width: 56px; height: 56px; background: #ddd; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: .75em; font-weight: bold; color: #555; }
-
         .row-name .cell { font-weight: bold; font-size: .8em; min-height: 40px; line-height: 1.4; background: #fff; white-space: normal; padding: 4px 6px; word-break: keep-all; overflow-wrap: break-word; }
-
         .row-members .cell { flex-direction: column; gap: 3px; min-height: 120px; background: #fafafa; padding: 5px 3px; align-items: center; }
         .member-btn { background: none; border: none; cursor: pointer; font-size: 1.1em; color: #003399; padding: 1px 3px; text-decoration: underline; max-width: calc(var(--col-width) - 8px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .member-btn:hover { color: #e91e63; }
-
-        .row-predictor .cell {
-            height: calc(var(--mark-size) + 16px);
-            min-height: calc(var(--mark-size) + 16px);
-            background: #fff;
-        }
+        .row-predictor .cell { height: calc(var(--mark-size) + 16px); min-height: calc(var(--mark-size) + 16px); background: #fff; }
         .row-predictor.even-row .cell { background: #f8f8f8; }
-
         .row-odds .cell { font-weight: bold; font-size: 1em; background: #f4f4f4; min-height: 34px; }
-        .odds-low  { color: #d00; }
+        .odds-low { color: #d00; }
         .odds-dark { color: #111; }
-
         .mark-img { width: var(--mark-size); height: var(--mark-size); object-fit: contain; display: block; }
 
-        #member-popup { position: fixed; background: #fff; border: 2px solid #003399; border-radius: 8px; padding: 14px 18px; box-shadow: 0 4px 20px rgba(0,0,0,.3); z-index: 3000; min-width: 200px; max-width: 280px; }
-        #member-popup h4 { margin: 0 0 10px; font-size: 1em; color: #003399; border-bottom: 1px solid #ccc; padding-bottom: 6px; }
+        /* メンバーポップアップ */
+        #member-popup { position: fixed; background: #fff; border: 2px solid var(--blue); border-radius: 8px; padding: 14px 18px; box-shadow: 0 4px 20px rgba(0,0,0,.2); z-index: 3000; min-width: 200px; max-width: 280px; user-select: none; }
+        #member-popup h4 { margin: 0 0 10px; font-size: 1em; color: var(--blue); border-bottom: 1px solid #ccc; padding-bottom: 6px; cursor: grab; }
         .popup-links { display: flex; flex-direction: column; gap: 6px; }
-        .popup-links a { display: flex; align-items: center; gap: 6px; color: #003399; text-decoration: none; font-size: .9em; padding: 4px 8px; border-radius: 4px; border: 1px solid #ccc; }
-        .popup-links a:hover { background: #eef; }
+        .popup-links a { display: flex; align-items: center; gap: 6px; color: var(--blue); text-decoration: none; font-size: .9em; padding: 4px 8px; border-radius: 4px; border: 1px solid #ccc; }
+        .popup-links a:hover { background: var(--blue-light); }
         .popup-links .no-link { color: #999; font-size: .85em; }
         #member-popup-close { position: absolute; top: 6px; right: 10px; background: none; border: none; font-size: 1.2em; cursor: pointer; color: #666; }
 
-        .mark-legend { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; padding: 8px 12px; background: #f5f5f5; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 12px; font-size: .82em; }
-        .mark-legend-item { display: flex; align-items: center; gap: 4px; }
-        .mark-legend-item img { width: 22px; height: 22px; }
+        .cta-wrap { text-align: center; margin: 0 0 32px; }
+        .cta-btn { display: inline-block; padding: 13px 40px; background: var(--blue); color: #fff; font-family: 'Noto Sans JP', sans-serif; font-size: .95rem; font-weight: 700; border-radius: 6px; text-decoration: none; letter-spacing: .04em; }
+
+        /* ══ スマホ (767px以下) ══ */
+        @media (max-width: 767px) {
+            body { font-size: 13px; }
+            .site-header { padding: 0 14px; }
+            .header-inner { height: 46px; }
+            .site-title { font-size: 1.1rem; }            .pc-view { display: none !important; }
+            .sp-view { display: block !important; }
+
+            .sp-section { padding: 10px 10px 4px; font-size: .65rem; font-weight: 700; letter-spacing: .1em; color: #8a9ab2; text-transform: uppercase; }
+            .sp-list { padding: 0 10px 16px; display: flex; flex-direction: column; gap: 6px; }
+            .sp-card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+            .sp-card-main { display: flex; align-items: center; height: 54px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+            .sp-frame-badge { width: 36px; height: 54px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 1.15rem; font-weight: 900; }
+            .sp-frame-1 { background: var(--frame-1); color: var(--frame-1-text); }
+            .sp-frame-2 { background: var(--frame-2); color: var(--frame-2-text); }
+            .sp-frame-3 { background: var(--frame-3); color: var(--frame-3-text); }
+            .sp-frame-4 { background: var(--frame-4); color: var(--frame-4-text); }
+            .sp-frame-5 { background: var(--frame-5); color: var(--frame-5-text); }
+            .sp-frame-6 { background: var(--frame-6); color: var(--frame-6-text); }
+            .sp-frame-7 { background: var(--frame-7); color: var(--frame-7-text); }
+            .sp-frame-8 { background: var(--frame-8); color: var(--frame-8-text); }
+            .sp-logo-cell { width: 44px; height: 54px; display: flex; align-items: center; justify-content: center; background: #fafafa; border-left: 1px solid #eef0f4; flex-shrink: 0; }
+            .sp-logo-cell img { width: 30px; height: 30px; object-fit: contain; }
+            .sp-logo-ph { width: 30px; height: 30px; background: #e8eaed; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: .55rem; font-weight: 700; color: #8a9ab2; }
+            .sp-card-info { flex: 1; padding: 0 10px; min-width: 0; }
+            .sp-team-name { font-size: .84rem; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text); }
+            .sp-odds-row { display: flex; align-items: center; gap: 5px; margin-top: 2px; }
+            .sp-odds-label { font-size: .65rem; color: #8a9ab2; }
+            .sp-odds-val { font-size: .82rem; font-weight: 700; }
+            .sp-odds-hot { color: #cc2200; }
+            .sp-odds-mid { color: var(--text); }
+            .sp-chevron { width: 34px; height: 54px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: #b0bac8; font-size: 18px; transition: transform .2s; user-select: none; }
+            .sp-chevron.open { transform: rotate(180deg); }
+            .sp-members { display: none; border-top: 1px solid #eef0f4; padding: 10px 12px; background: #fafbfd; flex-wrap: wrap; gap: 6px; }
+            .sp-members.open { display: flex; }
+            .sp-member-chip { background: var(--white); border: 1px solid var(--border); border-radius: 20px; padding: 4px 10px; font-size: .72rem; color: #3a5080; cursor: pointer; white-space: nowrap; font-family: 'Noto Sans JP', sans-serif; }
+            .sp-member-chip:active { background: var(--blue-light); }
+            .sp-cta-wrap { padding: 4px 10px 24px; }
+            .sp-cta-btn { display: block; background: var(--blue); color: #fff; text-align: center; padding: 14px; border-radius: 8px; font-size: .9rem; font-weight: 700; text-decoration: none; letter-spacing: .04em; font-family: 'Noto Sans JP', sans-serif; }
+            #member-popup { position: fixed; top: 50% !important; left: 50% !important; transform: translate(-50%, -50%); width: 80vw; max-width: 280px; }
+        }
     </style>
 </head>
 <body>
 
+<header class="site-header">
+    <div class="header-inner">
+        <a href="index.html" class="site-logo">
+            <img src="assets/images/logo.png" alt="PS予想企画" class="site-logo-img">
+            <div class="site-logo-text">
+                <span class="site-logo-main">PS予想企画</span>
+                <span class="site-logo-sub">PREMIER SERIES 26-27</span>
+            </div>
+        </a>
+    </div>
+</header>
 <nav class="page-nav">
     <a href="index.html" class="active">出馬表</a>
     <a href="marks.html">印</a>
     <a href="odds.html">オッズ</a>
     <a href="submit.html">買い目を送る</a>
     <a href="help.html">使い方</a>
+    <a href="faq.html">Q&A</a>
 </nav>
-<div id="countdown-bar"></div>
-
-<div class="page-inner">
-
-<div class="section-title">出馬表 — Premier Series 26-27</div>
-
-<div class="mark-legend">
-    <strong>印の見方：</strong>
-    <div class="mark-legend-item"><img src="assets/marks/mark_honmei.svg" alt="◎">本命</div>
-    <div class="mark-legend-item"><img src="assets/marks/mark_taikou.svg" alt="○">対抗</div>
-    <div class="mark-legend-item"><img src="assets/marks/mark_tanana.svg" alt="▲">単穴（3番手）</div>
-    <div class="mark-legend-item"><img src="assets/marks/mark_renka.svg"  alt="⟁">連下（4番手）</div>
-    <div class="mark-legend-item"><img src="assets/marks/mark_osae.svg"   alt="△">抑え</div>
+<div id="countdown-bar"><div id="countdown-bar-inner"></div>
+<!-- PC表示 -->
+<div class="pc-view">
+    <div class="page-inner">
+        <div class="page-heading-wrap">
+            <div class="page-label">Lineup</div>
+            <div class="page-heading">出馬表 <em>— Premier Series 26-27</em></div>
+        </div>
+        <div class="mark-legend">
+            <strong>印の見方：</strong>
+            <div class="mark-legend-item"><img src="assets/marks/mark_honmei.svg" alt="◎">本命</div>
+            <div class="mark-legend-item"><img src="assets/marks/mark_taikou.svg" alt="○">対抗</div>
+            <div class="mark-legend-item"><img src="assets/marks/mark_tanana.svg" alt="▲">単穴</div>
+            <div class="mark-legend-item"><img src="assets/marks/mark_renka.svg"  alt="⟁">連下</div>
+            <div class="mark-legend-item"><img src="assets/marks/mark_osae.svg"   alt="△">抑え</div>
+        </div>
+        <div class="seimai-outer">
+            <div class="seimai-table" id="seimai-table"></div>
+        </div>
+        <div class="cta-wrap">
+            <a href="odds.html" class="cta-btn">オッズで予想する →</a>
+        </div>
+    </div>
 </div>
 
-<div class="seimai-outer">
-    <div class="seimai-table" id="seimai-table"></div>
-</div>
-
-<div style="text-align:center; margin: 8px 0 24px;">
-    <a href="odds.html" style="display:inline-block; padding:12px 32px; background:#003399; color:#fff; font-weight:bold; border-radius:6px; text-decoration:none; font-size:1em;">
-        オッズで予想する →
-    </a>
-</div>
-
+<!-- スマホ表示 -->
+<div class="sp-view">
+    <div class="sp-section">Lineup</div>
+    <div class="sp-list" id="sp-list"></div>
+    <div class="sp-cta-wrap">
+        <a href="odds.html" class="sp-cta-btn">オッズで予想する →</a>
+    </div>
 </div>
 
 <div id="member-popup" style="display:none;">
@@ -188,6 +214,7 @@ const MARKS = [
 let teamsData = [], oddsData = {}, predictionsData = [];
 
 window.addEventListener('DOMContentLoaded', async () => {
+    renderCountdown();
     try {
         const [teams, odds, preds] = await Promise.all([
             loadJSON('data/teams.json'),
@@ -195,31 +222,27 @@ window.addEventListener('DOMContentLoaded', async () => {
             loadJSON('data/predictions/predictions.json'),
         ]);
         teamsData = teams; oddsData = odds; predictionsData = preds;
-        renderSeimai();
-        // スマホでは読み込み後に右端（1番）へスクロール
-        if (window.innerWidth < 768) {
-            const outer = document.querySelector('.seimai-outer');
-            outer.scrollLeft = outer.scrollWidth;
-        }
+        renderPC();
+        renderSP();
     } catch(e) {
         console.error(e);
-        document.querySelector('.seimai-outer').innerHTML = '<p style="padding:20px;color:#d00;">データの読み込みに失敗しました。</p>';
+        document.getElementById('seimai-table').innerHTML = '<p style="padding:20px;color:#d00;">データの読み込みに失敗しました。</p>';
+        document.getElementById('sp-list').innerHTML = '<p style="padding:20px;color:#d00;">データの読み込みに失敗しました。</p>';
     }
 });
 
-function renderSeimai() {
+function renderPC() {
     const table = document.getElementById('seimai-table');
     table.innerHTML = '';
-
     const labelCol = document.createElement('div');
     labelCol.className = 'label-col';
     const labelDefs = [
-        { cls:'row-num',     text:'番号' },
-        { cls:'row-logo',    text:'' },
-        { cls:'row-name',    text:'チーム名' },
+        { cls:'row-num', text:'番号' },
+        { cls:'row-logo', text:'' },
+        { cls:'row-name', text:'チーム名' },
         { cls:'row-members', text:'メンバー' },
         ...predictionsData.map(p => ({ cls:'row-predictor', text: p.name })),
-        { cls:'row-odds',    text:'単勝' },
+        { cls:'row-odds', text:'単勝' },
     ];
     labelDefs.forEach(d => {
         const wrap = document.createElement('div'); wrap.className = d.cls;
@@ -228,22 +251,17 @@ function renderSeimai() {
         wrap.appendChild(cell); labelCol.appendChild(wrap);
     });
     table.appendChild(labelCol);
-
     teamsData.forEach(team => {
         const col = document.createElement('div');
         col.className = `team-col frame-${team.id}`;
-
         addCell(col, 'row-num', String(team.id));
-
         const logoWrap = document.createElement('div'); logoWrap.className = 'row-logo';
         const logoCell = document.createElement('div'); logoCell.className = 'cell';
         const img = document.createElement('img');
         img.src = team.logo; img.alt = team.tag;
         img.onerror = () => { const ph = document.createElement('div'); ph.className = 'logo-placeholder'; ph.textContent = team.tag; logoCell.replaceChild(ph, img); };
         logoCell.appendChild(img); logoWrap.appendChild(logoCell); col.appendChild(logoWrap);
-
         addCell(col, 'row-name', team.name);
-
         const mWrap = document.createElement('div'); mWrap.className = 'row-members';
         const mCell = document.createElement('div'); mCell.className = 'cell';
         team.members.forEach(m => {
@@ -253,7 +271,6 @@ function renderSeimai() {
             mCell.appendChild(btn);
         });
         mWrap.appendChild(mCell); col.appendChild(mWrap);
-
         predictionsData.forEach((pred, pi) => {
             const markKey = pred.marks[String(team.id)];
             const pWrap = document.createElement('div');
@@ -261,7 +278,6 @@ function renderSeimai() {
             pWrap.appendChild(makeMarkCell(markKey));
             col.appendChild(pWrap);
         });
-
         const oddsVal = (oddsData.win || {})[String(team.id)] || '---';
         const oddsWrap = document.createElement('div'); oddsWrap.className = 'row-odds';
         const oddsCell = document.createElement('div'); oddsCell.className = 'cell';
@@ -269,8 +285,54 @@ function renderSeimai() {
         oddsCell.textContent = oddsVal;
         oddsCell.classList.add(!isNaN(oddsNum) && oddsNum <= 10 ? 'odds-low' : 'odds-dark');
         oddsWrap.appendChild(oddsCell); col.appendChild(oddsWrap);
-
         table.appendChild(col);
+    });
+}
+
+function renderSP() {
+    const list = document.getElementById('sp-list');
+    list.innerHTML = '';
+    teamsData.forEach(team => {
+        const oddsVal = (oddsData.win || {})[String(team.id)] || '---';
+        const hot = parseFloat(oddsVal) <= 10;
+        const card = document.createElement('div');
+        card.className = 'sp-card';
+        const memberChips = team.members.map(m =>
+            `<span class="sp-member-chip" data-member='${JSON.stringify(m).replace(/'/g, "&#39;")}'>${m.name}</span>`
+        ).join('');
+        card.innerHTML = `
+            <div class="sp-card-main">
+                <div class="sp-frame-badge sp-frame-${team.id}">${team.id}</div>
+                <div class="sp-logo-cell">
+                    <img src="${team.logo}" alt="${team.tag}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+                    <div class="sp-logo-ph" style="display:none">${team.tag}</div>
+                </div>
+                <div class="sp-card-info">
+                    <div class="sp-team-name">${team.name}</div>
+                    <div class="sp-odds-row">
+                        <span class="sp-odds-label">単勝</span>
+                        <span class="sp-odds-val ${hot ? 'sp-odds-hot' : 'sp-odds-mid'}">${oddsVal}倍</span>
+                    </div>
+                </div>
+                <div class="sp-chevron">&#8964;</div>
+            </div>
+            <div class="sp-members">${memberChips}</div>`;
+        card.querySelector('.sp-card-main').addEventListener('click', () => {
+            const members = card.querySelector('.sp-members');
+            const chevron = card.querySelector('.sp-chevron');
+            const open = members.classList.toggle('open');
+            chevron.classList.toggle('open', open);
+        });
+        card.querySelectorAll('.sp-member-chip').forEach(chip => {
+            chip.addEventListener('click', e => {
+                e.stopPropagation();
+                try {
+                    const m = JSON.parse(chip.dataset.member);
+                    openMemberPopup(m, chip);
+                } catch(err) {}
+            });
+        });
+        list.appendChild(card);
     });
 }
 
@@ -302,21 +364,70 @@ function openMemberPopup(member, anchor) {
     if (!member.x && !member.youtube && !member.bilibili) {
         links.innerHTML = '<span class="no-link">リンク情報なし</span>';
     } else {
-        if (member.x) { const a = document.createElement('a'); a.href = member.x; a.target = '_blank'; a.innerHTML = '<span>𝕏</span> X (Twitter)'; links.appendChild(a); }
-        if (member.youtube) { const a = document.createElement('a'); a.href = member.youtube; a.target = '_blank'; a.innerHTML = '<span>▶</span> YouTube'; links.appendChild(a); }
-        if (member.bilibili) { const a = document.createElement('a'); a.href = member.bilibili; a.target = '_blank'; a.innerHTML = '<span>▶</span> Bilibili'; links.appendChild(a); }
+        if (member.x)       { const a = document.createElement('a'); a.href = member.x;       a.target = '_blank'; a.innerHTML = '<span>𝕏</span> X (Twitter)'; links.appendChild(a); }
+        if (member.youtube)  { const a = document.createElement('a'); a.href = member.youtube;  a.target = '_blank'; a.innerHTML = '<span>▶</span> YouTube';     links.appendChild(a); }
+        if (member.bilibili) { const a = document.createElement('a'); a.href = member.bilibili; a.target = '_blank'; a.innerHTML = '<span>▶</span> Bilibili';    links.appendChild(a); }
     }
     popup.style.display = 'block';
-    const rect = anchor.getBoundingClientRect();
-    const pw = popup.offsetWidth;
-    let left = rect.left + window.scrollX;
-    if (left + pw > window.innerWidth - 10) left = window.innerWidth - pw - 10;
-    if (left < 10) left = 10;
-    popup.style.left = left + 'px';
-    popup.style.top = (rect.bottom + window.scrollY + 6) + 'px';
+    popup.style.transform = '';
+    if (window.innerWidth > 767) {
+        const rect = anchor.getBoundingClientRect();
+        const pw = popup.offsetWidth || 240;
+        const ph = popup.offsetHeight || 120;
+        // position:fixed なので getBoundingClientRect の値をそのまま使う（scrollY不要）
+        let left = rect.left;
+        let top  = rect.top - ph - 8;
+        if (top < 10) top = rect.bottom + 8;
+        if (left + pw > window.innerWidth - 10) left = window.innerWidth - pw - 10;
+        if (left < 10) left = 10;
+        popup.style.left = left + 'px';
+        popup.style.top  = top  + 'px';
+    }
+    initDrag(popup);
+}
+
+function initDrag(popup) {
+    const handle = popup.querySelector('h4');
+    let startX, startY, startLeft, startTop, dragging = false;
+    handle.onmousedown = function(e) {
+        dragging = true;
+        startX = e.clientX; startY = e.clientY;
+        startLeft = parseInt(popup.style.left) || popup.getBoundingClientRect().left;
+        startTop  = parseInt(popup.style.top)  || popup.getBoundingClientRect().top;
+        handle.style.cursor = 'grabbing';
+        e.preventDefault();
+    };
+    document.onmousemove = function(e) {
+        if (!dragging) return;
+        const dx = e.clientX - startX, dy = e.clientY - startY;
+        popup.style.left = Math.max(0, startLeft + dx) + 'px';
+        popup.style.top  = Math.max(0, startTop  + dy) + 'px';
+    };
+    document.onmouseup = function() {
+        if (dragging) { dragging = false; handle.style.cursor = 'grab'; }
+    };
+    // タッチ対応
+    handle.ontouchstart = function(e) {
+        const t = e.touches[0];
+        dragging = true;
+        startX = t.clientX; startY = t.clientY;
+        startLeft = parseInt(popup.style.left) || popup.getBoundingClientRect().left;
+        startTop  = parseInt(popup.style.top)  || popup.getBoundingClientRect().top;
+    };
+    document.ontouchmove = function(e) {
+        if (!dragging) return;
+        const t = e.touches[0];
+        popup.style.left = Math.max(0, startLeft + t.clientX - startX) + 'px';
+        popup.style.top  = Math.max(0, startTop  + t.clientY - startY) + 'px';
+        e.preventDefault();
+    };
+    document.ontouchend = function() { dragging = false; };
 }
 function closePopup() { document.getElementById('member-popup').style.display = 'none'; }
-document.addEventListener('click', () => { closePopup(); });
+document.addEventListener('click', e => {
+    const popup = document.getElementById('member-popup');
+    if (popup.style.display !== 'none' && !popup.contains(e.target)) closePopup();
+});
 </script>
 </body>
 </html>
